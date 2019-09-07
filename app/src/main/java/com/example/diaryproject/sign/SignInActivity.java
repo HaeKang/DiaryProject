@@ -194,8 +194,6 @@ public class SignInActivity extends AppCompatActivity {
                 intent.putExtra("user_id", id);
                 intent.putExtra("user_pw",pw);
                 intent.putExtra("user_nickname",nickname);
-
-                StyleableToast.makeText(getApplicationContext(), "반갑습니다 " + nickname + " 님!", Toast.LENGTH_LONG, R.style.sign).show();
                 startActivity(intent);
                 finish();
 

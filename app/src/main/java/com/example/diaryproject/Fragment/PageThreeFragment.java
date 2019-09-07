@@ -22,9 +22,11 @@ public class PageThreeFragment extends Fragment {
     }
 
 
-    public static PageThreeFragment newInstance(){
-        Bundle args = new Bundle();
+    public static PageThreeFragment newInstance(String p1, String p2){
         PageThreeFragment fragment = new PageThreeFragment();
+        Bundle args = new Bundle();
+        args.putString("user_id", p1);
+        args.putString("user_nick",p2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -32,8 +34,13 @@ public class PageThreeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View v = inflater.inflate(R.layout.fragment_page_three, container, false);
+        String id = getArguments().getString("user_id");
+        String nickname = getArguments().getString("user_nick");
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_page_three, container, false);
+        return v;
     }
 
 }

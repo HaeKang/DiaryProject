@@ -4,9 +4,11 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="windowNoTitle">true</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">#ff9a9e</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">#ff9a9e</item>
+
     </style>
 
     <style name="backtoast">
@@ -14,7 +16,7 @@
         <item name="stTextColor">#fff</item>
         <item name="stFont">@font/nanumsquareroundr</item>
         <item name="stTextSize">14sp</item>
-        <item name="stColorBackground">#FF636363</item>
+        <item name="stColorBackground">#ff9a9e</item>
         <item name="stSolidBackground">true</item>
         <item name="stIconStart">@drawable/login_id</item>
         <item name="stRadius">5dp</item>
@@ -25,7 +27,7 @@
         <item name="stTextColor">#fff</item>
         <item name="stFont">@font/nanumsquareroundr</item>
         <item name="stTextSize">14sp</item>
-        <item name="stColorBackground">#FF636363</item>
+        <item name="stColorBackground">#ff9a9e</item>
         <item name="stSolidBackground">true</item>
         <item name="stIconStart">@drawable/login_id</item>
         <item name="stRadius">5dp</item>
