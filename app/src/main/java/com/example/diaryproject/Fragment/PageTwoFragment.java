@@ -1,6 +1,7 @@
 package com.example.diaryproject.Fragment;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -23,7 +24,6 @@ import org.w3c.dom.Text;
  * A simple {@link Fragment} subclass.
  */
 public class PageTwoFragment extends Fragment {
-
 
     public PageTwoFragment() {
 
@@ -48,8 +48,8 @@ public class PageTwoFragment extends Fragment {
         TextView nick_tv = v.findViewById(R.id.nick_textview);
         Button write = v.findViewById(R.id.write);
 
-        String id = getArguments().getString("user_id");
-        String nickname = getArguments().getString("user_nick");
+        final String id = getArguments().getString("user_id");
+        final String nickname = getArguments().getString("user_nick");
 
         id_tv.setText(id);
         nick_tv.setText(nickname);
@@ -57,6 +57,8 @@ public class PageTwoFragment extends Fragment {
         write.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View view){
                 Intent intent = new Intent(getActivity(), WriteActivity.class);
+                intent.putExtra("user_id", id);
+                intent.putExtra("user_nick",nickname);
                 startActivity(intent);
             }
         });
@@ -64,5 +66,6 @@ public class PageTwoFragment extends Fragment {
         return v;
 
     }
+
 
 }

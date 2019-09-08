@@ -26,15 +26,18 @@ public class MainActivity extends FragmentActivity {
     private FragmentAdapter mAdapter;
     private TabLayout mTab;
 
+    private String id;
+    private String nickname;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Intent intent = getIntent();
-        String id = intent.getExtras().getString("user_id");
-        String nickname = intent.getExtras().getString("user_nickname");
-        StyleableToast.makeText(getApplicationContext(), "반갑습니다 " + nickname + " 님!", Toast.LENGTH_LONG, R.style.sign).show();
+        id = intent.getExtras().getString("user_id");
+        nickname = intent.getExtras().getString("user_nickname");
+
 
         //데이터 전송 제발
 
