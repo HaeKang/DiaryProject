@@ -3,11 +3,15 @@ package com.example.diaryproject.Diary;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.diaryproject.MainActivity;
@@ -27,6 +32,8 @@ import com.muddzdev.styleabletoast.StyleableToast;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -51,12 +58,15 @@ public class WriteActivity extends AppCompatActivity {
 
 
     private static final int gallery = 1;
+    private String temp = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write);
 
+        tedPermission(); // 권한 요청
 
         Intent GetIntent = getIntent();
         id = GetIntent.getExtras().getString("user_id");
@@ -93,67 +103,12 @@ public class WriteActivity extends AppCompatActivity {
         // 이미지 추가
         imageBtn.setOnClickListener( new View.OnClickListener(){
             public void onClick(View v){
-                Intent intent_image = new Intent();
-                intent_image.setAction(Intent.ACTION_GET_CONTENT);
-                intent_image.setType("image/-");
-                startActivityForResult(intent_image, gallery);
+                // 갤러리 open
+                goToAlbum();
             }
          });
     }
 
-    // 이미지 part
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode, resultCode, data);
-        Intent intent = new Intent();
-        Bitmap bm;
-        if(resultCode == RESULT_OK){
-            try{
-                bm = MediaStore.Images.Media.getBitmap( getContentResolver(), data.getData());
-                bm = resize(bm);
-                intent.putExtra("bitmap",bm);
-            } catch (IOException e){
-                e.printStackTrace();
-            } catch (OutOfMemoryError e){
-                Toast.makeText(getApplicationContext(),"이미지 용량 큼", Toast.LENGTH_LONG).show();
-            }
-            setResult(RESULT_OK, intent);
-            finish();
-        } else{
-            setResult(RESULT_CANCELED, intent);
-            finish();
-        }
-    }
-
-    //이미지 리사이징
-    private Bitmap resize(Bitmap bm) {
-        Configuration config = getResources().getConfiguration();
-        if (config.smallestScreenWidthDp >= 800)
-            bm = Bitmap.createScaledBitmap(bm, 400, 240, true);
-        else if (config.smallestScreenWidthDp >= 600)
-            bm = Bitmap.createScaledBitmap(bm, 300, 180, true);
-        else if (config.smallestScreenWidthDp >= 400)
-            bm = Bitmap.createScaledBitmap(bm, 200, 120, true);
-        else if (config.smallestScreenWidthDp >= 360)
-            bm = Bitmap.createScaledBitmap(bm, 180, 108, true);
-        else
-            bm = Bitmap.createScaledBitmap(bm, 160, 96, true);
-        return bm;
-
-    }
-
-    //이미지 인코딩
-    public void BitMapToString(Bitmap bitmap){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
-        byte[] arr = baos.toByteArray();
-        String image = Base64.encodeToString(arr, Base64.DEFAULT);
-        String temp = "";
-        try{
-            temp = "&imagedevice="+URLEncoder.encode(image,"utf-8");
-        } catch (Exception e){
-            Log.e("exception",e.toString());
-        }
-    }
 
 
     // DB에 넣기
@@ -249,5 +204,115 @@ public class WriteActivity extends AppCompatActivity {
     }
 
 
+
+    // 갤러리열기 1
+    private void goToAlbum(){
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/-");
+        startActivityForResult(intent, gallery);
+    }
+
+
+    // 갤러리열기 2
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+
+        Intent intent = new Intent();
+        Bitmap bm;
+
+
+        if(resultCode != Activity.RESULT_OK){   // 뒤로가기
+            Toast.makeText(this, "취소",Toast.LENGTH_LONG).show();
+
+            if(temp != null){
+                temp = null;
+            }
+        }
+
+        if(resultCode == RESULT_OK) {
+            if (requestCode == gallery) {
+                try{
+                    bm = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                    bm = resize(bm);
+                    BitMapToString(bm);
+                    setImage(bm);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                setResult(RESULT_OK, intent);
+
+            }
+        }
+    }
+
+    //이미지 셋팅
+
+    private void setImage(Bitmap bm){
+        ImageView imageView = findViewById(R.id.imageView6);
+        imageView.setImageBitmap(bm);
+    }
+
+    //이미지 리사이징
+    private Bitmap resize(Bitmap bm) {
+        Configuration config = getResources().getConfiguration();
+        if (config.smallestScreenWidthDp >= 800)
+            bm = Bitmap.createScaledBitmap(bm, 400, 240, true);
+        else if (config.smallestScreenWidthDp >= 600)
+            bm = Bitmap.createScaledBitmap(bm, 300, 180, true);
+        else if (config.smallestScreenWidthDp >= 400)
+            bm = Bitmap.createScaledBitmap(bm, 200, 120, true);
+        else if (config.smallestScreenWidthDp >= 360)
+            bm = Bitmap.createScaledBitmap(bm, 180, 108, true);
+        else
+            bm = Bitmap.createScaledBitmap(bm, 160, 96, true);
+        return bm;
+
+    }
+
+    //이미지 인코딩
+    public void BitMapToString(Bitmap bitmap){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
+        byte[] arr = baos.toByteArray();
+        String image = Base64.encodeToString(arr, Base64.DEFAULT);
+
+        try{
+            temp = "&imagedevice="+URLEncoder.encode(image,"utf-8");
+            Toast.makeText(this, temp + " 설정 됨",Toast.LENGTH_LONG).show();
+        } catch (Exception e){
+            Log.e("exception",e.toString());
+        }
+
+    }
+
+
+    //권한 요청
+    private void tedPermission() {
+
+        PermissionListener permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                // 권한 요청 성공
+
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                // 권한 요청 실패
+            }
+        };
+
+        TedPermission.with(this)
+                .setPermissionListener(permissionListener)
+                .setRationaleMessage(getResources().getString(R.string.permission_2))
+                .setDeniedMessage(getResources().getString(R.string.permission_1))
+                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .check();
+
+    }
 
 }
