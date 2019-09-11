@@ -88,15 +88,21 @@ public class WriteActivity extends AppCompatActivity {
                 title = etitle.getText().toString();
                 content = econtent.getText().toString();
 
-                Write task = new Write();
-                task.execute(getString(R.string.sever)+ "/Write.php",id, nickname,title,content);
+                if(temp == "") {
+                    Toast.makeText(getApplicationContext(),"이미지 업로드하샘",Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Write task = new Write();
+                    Toast.makeText(getApplicationContext(),temp,Toast.LENGTH_LONG).show();
+                    task.execute(getString(R.string.sever) + "/Write.php", id, nickname, title, content, temp);
 
-                Intent intent = new Intent(WriteActivity.this,MainActivity.class);
-                intent.putExtra("user_id", id);
-                intent.putExtra("user_nickname",nickname);
-                StyleableToast.makeText(getApplicationContext(), "글쓰기 완료!", Toast.LENGTH_LONG, R.style.sign).show();
-                startActivity(intent);
-                finish();
+                    Intent intent = new Intent(WriteActivity.this, MainActivity.class);
+                    intent.putExtra("user_id", id);
+                    intent.putExtra("user_nickname", nickname);
+                    //StyleableToast.makeText(getApplicationContext(), "글쓰기 완료!", Toast.LENGTH_LONG, R.style.sign).show();
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
@@ -105,6 +111,7 @@ public class WriteActivity extends AppCompatActivity {
             public void onClick(View v){
                 // 갤러리 open
                 goToAlbum();
+
             }
          });
     }
@@ -118,7 +125,6 @@ public class WriteActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
             progressDialog = ProgressDialog.show(WriteActivity.this,
                     "Please Wait", null, true, true);
         }
@@ -127,6 +133,7 @@ public class WriteActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
             progressDialog.dismiss();
             Log.d(TAG, "POST response  - " + result);
         }
@@ -140,11 +147,12 @@ public class WriteActivity extends AppCompatActivity {
             String nick = (String)params[2];
             String title = (String)params[3];
             String content = (String)params[4];
+            String image = (String)params[5];
 
 
 
             String postParameters = "id=" + id + "&nickname=" + nick + "&title=" + title
-                    + "&content=" + content;
+                    + "&content=" + content + "&image=" + image;
 
 
             try {
@@ -222,7 +230,7 @@ public class WriteActivity extends AppCompatActivity {
 
 
         if(resultCode != Activity.RESULT_OK){   // 뒤로가기
-            Toast.makeText(this, "취소",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "사진을 선택해주세요",Toast.LENGTH_LONG).show();
 
             if(temp != null){
                 temp = null;
@@ -249,8 +257,22 @@ public class WriteActivity extends AppCompatActivity {
         }
     }
 
-    //이미지 셋팅
+    //이미지 인코딩
+    public void BitMapToString(Bitmap bitmap){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
+        byte[] arr = baos.toByteArray();
+        String image = Base64.encodeToString(arr, Base64.DEFAULT);
 
+        try{
+            temp = URLEncoder.encode(image,"utf-8");
+        } catch (Exception e){
+            Log.e("exception",e.toString());
+        }
+
+    }
+
+    //이미지 셋팅
     private void setImage(Bitmap bm){
         ImageView imageView = findViewById(R.id.imageView6);
         imageView.setImageBitmap(bm);
@@ -273,21 +295,6 @@ public class WriteActivity extends AppCompatActivity {
 
     }
 
-    //이미지 인코딩
-    public void BitMapToString(Bitmap bitmap){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
-        byte[] arr = baos.toByteArray();
-        String image = Base64.encodeToString(arr, Base64.DEFAULT);
-
-        try{
-            temp = "&imagedevice="+URLEncoder.encode(image,"utf-8");
-            Toast.makeText(this, temp + " 설정 됨",Toast.LENGTH_LONG).show();
-        } catch (Exception e){
-            Log.e("exception",e.toString());
-        }
-
-    }
 
 
     //권한 요청
