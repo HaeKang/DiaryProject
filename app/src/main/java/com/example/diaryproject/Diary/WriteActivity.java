@@ -93,13 +93,12 @@ public class WriteActivity extends AppCompatActivity {
                 }
                 else {
                     Write task = new Write();
-                    Toast.makeText(getApplicationContext(),temp,Toast.LENGTH_LONG).show();
                     task.execute(getString(R.string.sever) + "/Write.php", id, nickname, title, content, temp);
 
                     Intent intent = new Intent(WriteActivity.this, MainActivity.class);
                     intent.putExtra("user_id", id);
                     intent.putExtra("user_nickname", nickname);
-                    //StyleableToast.makeText(getApplicationContext(), "글쓰기 완료!", Toast.LENGTH_LONG, R.style.sign).show();
+                    StyleableToast.makeText(getApplicationContext(), "글쓰기 완료!", Toast.LENGTH_LONG, R.style.sign).show();
                     startActivity(intent);
                     finish();
                 }
