@@ -91,17 +91,11 @@ public class SignInActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-
             progressDialog.dismiss();
 
 
-            if(result.equals("아이디와 패스워드를 다시 확인하세요")){
+            if(result.equals("아이디와 패스워드를 다시 확인하세요") || result == null){
                 Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
-            }
-
-
-            if (result == null || result.equals("")){
-                Toast.makeText(getApplicationContext(),errorString,Toast.LENGTH_LONG).show();
             }
             else {
                 mJsonString = result;

@@ -29,6 +29,8 @@ public class PageTwoFragment extends Fragment {
 
     }
 
+
+    // id, nickname 불러오기
     public static PageTwoFragment newInstance(String p1, String p2){
         PageTwoFragment fragment = new PageTwoFragment();
         Bundle args = new Bundle();

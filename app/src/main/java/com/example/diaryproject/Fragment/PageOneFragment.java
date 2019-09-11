@@ -4,6 +4,7 @@ package com.example.diaryproject.Fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,8 +45,13 @@ public class PageOneFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_page_one, container, false);
 
         RecyclerView mRecyclerView = v.findViewById(R.id.recyclerView);
+        //mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(linearLayoutManager);
+
 
         mAdapter = new RecyclerAdapter();
         mRecyclerView.setAdapter(mAdapter);
@@ -57,9 +63,9 @@ public class PageOneFragment extends Fragment {
 
     private void getData(){
 
-        List<String> listTitle = Arrays.asList("test","test1","test2","test3");
-        List<String> listNick = Arrays.asList("테스트","테1","테2","테3");
-        List<String> listDate = Arrays.asList("0","1","2","3");
+        List<String> listTitle = Arrays.asList("test","test1","test2","test3","test4","test5","test6");
+        List<String> listNick = Arrays.asList("테스트","테1","테2","테3","테4","테5","테6");
+        List<String> listDate = Arrays.asList("0","1","2","3","4","5","6");
 
         for(int i=0; i< listTitle.size(); i++){
             Data data = new Data();
