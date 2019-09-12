@@ -8,7 +8,7 @@ public class Data {
 
     private String title;
     private String nickname;
-    private String date;
+    private String postid;
 
     public String getTitle(){
         return title;
@@ -26,14 +26,12 @@ public class Data {
         this.nickname = nickname;
     }
 
-    public String getDate(){
-        this.date = date.toString();
-        return date;
+    public String getPostid(){
+        return postid;
     }
 
-    public void setDate(String date){
-
-        this.date = date;
+    public void setPostid(String postid){
+        this.postid = postid;
     }
 
 }

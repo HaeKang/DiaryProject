@@ -59,7 +59,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
         void onBind(Data data){
             t1.setText(data.getTitle());
             t2.setText(data.getNickname());
-            t3.setText(data.getDate());
+            t3.setText(data.getPostid());
         }
 
     }
