@@ -43,10 +43,8 @@ import java.util.List;
  */
 public class PageOneFragment extends Fragment {
 
-
     private RecyclerAdapter mAdapter;
     ArrayList<HashMap<String,String>> mArrayList = new ArrayList<>();
-
 
     private String TAG = "PHPTEST";
     private static final String TAG_JSON="postlist";
@@ -98,14 +96,14 @@ public class PageOneFragment extends Fragment {
         List<String> listNick = new ArrayList<>();
         List<String> listpostid = new ArrayList<>();
 
-        for(int i=0; i< mArrayList.size(); i++){
+        for (int i = 0; i < mArrayList.size(); i++) {
             listTitle.add(mArrayList.get(i).get(TAG_TITLE));
             listNick.add(mArrayList.get(i).get(TAG_NICKNAME));
             listpostid.add(mArrayList.get(i).get(TAG_POSTID));
         }
 
 
-        for(int i=0; i< listTitle.size(); i++){
+        for (int i = 0; i < listTitle.size(); i++) {
             Data data = new Data();
             data.setTitle(listTitle.get(i));
             data.setNickname(listNick.get(i));
@@ -113,7 +111,7 @@ public class PageOneFragment extends Fragment {
             mAdapter.addItem(data);
         }
 
-        mAdapter.notifyDataSetChanged();
+            mAdapter.notifyDataSetChanged();
 
     }
 
@@ -202,7 +200,7 @@ public class PageOneFragment extends Fragment {
             try {
                 JSONObject jsonObject = new JSONObject(mJsonString);
                 JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
-
+                mArrayList.clear();
 
                 for(int i=0; i<jsonArray.length(); i++){
                     HashMap<String, String> hashMap = new HashMap<>();

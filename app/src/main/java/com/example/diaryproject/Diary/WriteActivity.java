@@ -132,7 +132,6 @@ public class WriteActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
             progressDialog.dismiss();
             Log.d(TAG, "POST response  - " + result);
         }
