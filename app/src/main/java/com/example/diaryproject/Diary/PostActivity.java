@@ -183,6 +183,7 @@ public class PostActivity extends AppCompatActivity {
                 tTitle = findViewById(R.id.title_text);
                 tDate = findViewById(R.id.date_text);
                 tContent = findViewById(R.id.content_text);
+                tImage = findViewById(R.id.content_image);
 
                 tNickname.setText(nickname);
                 tTitle.setText(title);
@@ -191,6 +192,8 @@ public class PostActivity extends AppCompatActivity {
 
                 if(image != null) {
                     tImage.setImageBitmap(image);
+                } else{
+                    tImage.setImageResource(R.drawable.signup);
                 }
 
             } catch (JSONException e) {
@@ -203,7 +206,6 @@ public class PostActivity extends AppCompatActivity {
         public Bitmap StringToBitMap(String image){
             Log.e("StringToBitMap","StringToBitMap");
             try{
-
                 byte [] encodeByte=Base64.decode(image,Base64.DEFAULT);
                 Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
                 return bitmap;
