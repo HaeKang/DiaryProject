@@ -39,8 +39,6 @@ public class MainActivity extends FragmentActivity {
         nickname = intent.getExtras().getString("user_nickname");
 
 
-        //데이터 전송 제발
-
 
         // 레이아웃 설정하기
         mViewPager = findViewById(R.id.view_pager);

@@ -23,7 +23,7 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                return PageOneFragment.newInstance();
+                return PageOneFragment.newInstance(id_a,nick_a);
             case 1:
                 return PageTwoFragment.newInstance(id_a,nick_a);
             case 2:

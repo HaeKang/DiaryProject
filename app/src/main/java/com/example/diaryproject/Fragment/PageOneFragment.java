@@ -65,8 +65,10 @@ public class PageOneFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static PageOneFragment newInstance(){
+    public static PageOneFragment newInstance(String p1, String p2){
         Bundle args = new Bundle();
+        args.putString("user_id", p1);
+        args.putString("user_nick",p2);
         PageOneFragment fragment = new PageOneFragment();
         fragment.setArguments(args);
         return fragment;
@@ -77,6 +79,9 @@ public class PageOneFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_page_one, container, false);
+
+        final String id = getArguments().getString("user_id");
+        final String nickname = getArguments().getString("user_nick");
 
         getAllPost task = new getAllPost();
         task.execute();
@@ -97,9 +102,10 @@ public class PageOneFragment extends Fragment {
             @Override
             public void onClick(View view, int pos) {
                 String postid = mArrayList.get(pos).get(TAG_POSTID);
-
                 Intent intent = new Intent(getActivity(), PostActivity.class);
                 intent.putExtra("POSTID",postid);
+                intent.putExtra("USERID",id);
+                intent.putExtra("NICKNAME",nickname);
                 startActivity(intent);
             }
         }));
@@ -140,18 +146,25 @@ public class PageOneFragment extends Fragment {
     }
 
     public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-
+        private GestureDetector detector;
         private PageOneFragment.ClickListener clickListener;
 
         public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final PageOneFragment.ClickListener clickListener) {
             this.clickListener = clickListener;
+            detector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
+                public boolean onSingleTapUp(MotionEvent e){
+                    return true;
+                }
+            });
+
         }
 
         @Override
         public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
             View child = rv.findChildViewUnder(e.getX(), e.getY());
-            if (child != null && clickListener != null) {
+            if (child != null && clickListener != null && detector.onTouchEvent(e)) {
                 clickListener.onClick(child, rv.getChildAdapterPosition(child));
+                return true;
             }
             return false;
         }

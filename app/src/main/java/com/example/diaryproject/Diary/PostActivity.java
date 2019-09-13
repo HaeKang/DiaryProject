@@ -55,6 +55,9 @@ public class PostActivity extends AppCompatActivity {
 
     String mJsonString;
 
+    String id;
+    String nickname;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,14 +66,20 @@ public class PostActivity extends AppCompatActivity {
 
         Intent GetIntent = getIntent();
         post_id = GetIntent.getExtras().getString("POSTID");
+        id = GetIntent.getExtras().getString("USERID");
+        nickname = GetIntent.getExtras().getString("NICKNAME");
 
         ReadPost task = new ReadPost();
         task.execute(post_id);
 
     }
 
+    // 댓글 달기
 
-    // DB연결
+
+
+
+    // 글 불러오기
     private class ReadPost extends AsyncTask<String, Void, String> {
 
         ProgressDialog progressDialog;
@@ -185,7 +194,7 @@ public class PostActivity extends AppCompatActivity {
                 tContent = findViewById(R.id.content_text);
                 tImage = findViewById(R.id.content_image);
 
-                tNickname.setText(nickname);
+                tNickname.setText("작성자 : " + nickname);
                 tTitle.setText(title);
                 tDate.setText(date);
                 tContent.setText(content);
@@ -206,7 +215,7 @@ public class PostActivity extends AppCompatActivity {
         public Bitmap StringToBitMap(String image){
             Log.e("StringToBitMap","StringToBitMap");
             try{
-                byte [] encodeByte=Base64.decode(image,Base64.DEFAULT);
+                byte [] encodeByte=image.getBytes();
                 Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
                 return bitmap;
 
@@ -217,6 +226,11 @@ public class PostActivity extends AppCompatActivity {
         }
 
     }
+
+    public void onBackPressed(){
+        finish();
+    }
+
 }
 
 
