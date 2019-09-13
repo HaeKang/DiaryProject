@@ -3,7 +3,7 @@
     package="com.example.diaryproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -13,9 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
-        >
-        <activity android:name=".Diary.WriteActivity"></activity>
+        android:usesCleartextTraffic="true">
+        <activity android:name=".Diary.PostActivity"></activity>
+        <activity android:name=".Diary.WriteActivity" />
         <activity android:name=".sign.SignUpActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".sign.SignInActivity" />
@@ -27,7 +27,5 @@
             </intent-filter>
         </activity>
     </application>
-
-
 
 </manifest>

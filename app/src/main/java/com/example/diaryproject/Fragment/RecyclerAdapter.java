@@ -1,12 +1,14 @@
 package com.example.diaryproject.Fragment;
 
 import android.content.ClipData;
+import android.content.Intent;
 import android.provider.ContactsContract;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.diaryproject.R;
 
@@ -20,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemViewHolder> {
 
   private ArrayList<Data> listData = new ArrayList<>();
+
 
 
     @NonNull
@@ -48,12 +51,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
         private TextView t2;
         private TextView t3;
 
+
+
         ItemViewHolder(View itemView){
             super(itemView);
 
             t1 = itemView.findViewById(R.id.title_listitem);
             t2 = itemView.findViewById(R.id.nickname_listitem);
             t3 = itemView.findViewById(R.id.date_listitem);
+
         }
 
         void onBind(Data data){
@@ -63,5 +69,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
         }
 
     }
+
+
 
 }

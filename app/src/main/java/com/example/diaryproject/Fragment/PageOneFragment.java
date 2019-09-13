@@ -2,22 +2,27 @@ package com.example.diaryproject.Fragment;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.example.diaryproject.Diary.PostActivity;
 import com.example.diaryproject.MainActivity;
 import com.example.diaryproject.R;
 import com.example.diaryproject.sign.SignInActivity;
@@ -35,6 +40,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 
@@ -86,6 +92,17 @@ public class PageOneFragment extends Fragment {
         mAdapter = new RecyclerAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), mRecyclerView, new ClickListener(){
+            @Override
+            public void onClick(View view, int pos) {
+                String postid = mArrayList.get(pos).get(TAG_POSTID);
+                int post_id = Integer.parseInt(postid);
+                Intent intent = new Intent(getActivity(), PostActivity.class);
+                intent.putExtra("POSTID",post_id);
+                startActivity(intent);
+            }
+        }));
+
 
         return v;
     }
@@ -115,6 +132,37 @@ public class PageOneFragment extends Fragment {
 
     }
 
+
+    //클릭Listener
+    public interface ClickListener{
+        void onClick(View view, int pos);
+    }
+
+    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+
+        private PageOneFragment.ClickListener clickListener;
+
+        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final PageOneFragment.ClickListener clickListener) {
+            this.clickListener = clickListener;
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+            if (child != null && clickListener != null) {
+                clickListener.onClick(child, rv.getChildAdapterPosition(child));
+            }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        }
+    }
 
     //DB 연결
     private class getPost extends AsyncTask<String, Void, String> {
@@ -230,3 +278,8 @@ public class PageOneFragment extends Fragment {
         }
     }
 }
+
+
+
+
+
