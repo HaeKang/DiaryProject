@@ -19,11 +19,7 @@ public class PostActivity extends AppCompatActivity {
 
         Intent GetIntent = getIntent();
         postid = GetIntent.getExtras().getInt("POSTID");
-        String post_id = Integer.toString(postid);
 
-        TextView test;
-        test = findViewById(R.id.testText);
-        test.setText(post_id);
 
     }
 }
