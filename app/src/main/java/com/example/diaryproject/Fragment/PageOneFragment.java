@@ -4,6 +4,7 @@ package com.example.diaryproject.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.pdf.PdfDocument;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -77,7 +78,7 @@ public class PageOneFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_page_one, container, false);
 
-        getPost task = new getPost();
+        getAllPost task = new getAllPost();
         task.execute();
 
         RecyclerView mRecyclerView = v.findViewById(R.id.recyclerView);
@@ -96,9 +97,9 @@ public class PageOneFragment extends Fragment {
             @Override
             public void onClick(View view, int pos) {
                 String postid = mArrayList.get(pos).get(TAG_POSTID);
-                int post_id = Integer.parseInt(postid);
+
                 Intent intent = new Intent(getActivity(), PostActivity.class);
-                intent.putExtra("POSTID",post_id);
+                intent.putExtra("POSTID",postid);
                 startActivity(intent);
             }
         }));
@@ -165,7 +166,7 @@ public class PageOneFragment extends Fragment {
     }
 
     //DB 연결
-    private class getPost extends AsyncTask<String, Void, String> {
+    private class getAllPost extends AsyncTask<String, Void, String> {
 
         ProgressDialog progressDialog;
         String errorString = null;
@@ -277,6 +278,9 @@ public class PageOneFragment extends Fragment {
 
         }
     }
+
+
+
 }
 
 

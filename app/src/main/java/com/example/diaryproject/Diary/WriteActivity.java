@@ -260,10 +260,11 @@ public class WriteActivity extends AppCompatActivity {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
         byte[] arr = baos.toByteArray();
-        String image = Base64.encodeToString(arr, Base64.DEFAULT);
+        //String image = Base64.encodeToString(arr, Base64.DEFAULT);
+        temp = Base64.encodeToString(arr, Base64.DEFAULT);
 
         try{
-            temp = URLEncoder.encode(image,"utf-8");
+            //temp = URLEncoder.encode(image,"utf-8");
         } catch (Exception e){
             Log.e("exception",e.toString());
         }
