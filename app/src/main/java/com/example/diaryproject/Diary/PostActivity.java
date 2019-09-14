@@ -1,6 +1,8 @@
 package com.example.diaryproject.Diary;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -17,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.diaryproject.Fragment.Data;
+import com.example.diaryproject.Fragment.RecyclerAdapter;
 import com.example.diaryproject.MainActivity;
 import com.example.diaryproject.R;
 import com.example.diaryproject.sign.SignInActivity;
@@ -34,7 +38,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class PostActivity extends AppCompatActivity {
 
@@ -42,11 +48,17 @@ public class PostActivity extends AppCompatActivity {
 
     private String TAG = "PHPTEST";
     private static final String TAG_JSON = "post";
+    private static final String TAG_JSON2 = "compost";
     private static final String TAG_NICKNAME = "nickname";
     private static final String TAG_DATE = "date";
     private static final String TAG_TITLE = "title";
     private static final String TAG_CONTENT = "content";
+    private static final String TAG_COMMENT = "comment";
     private static final String TAG_IMAGE = "image";
+
+    private ComRecyclerAdapter mAdapter;
+    ArrayList<HashMap<String,String>> mArrayList = new ArrayList<>();
+
 
     TextView tTitle;
     TextView tContent;
@@ -67,14 +79,30 @@ public class PostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 
+        //댓글 ui
+        RecyclerView mRecycler = findViewById(R.id.comment_recycler);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PostActivity.this);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        mRecycler.setLayoutManager(linearLayoutManager);
+
+        mAdapter = new ComRecyclerAdapter();
+        mRecycler.setAdapter(mAdapter);
+
         Intent GetIntent = getIntent();
         post_id = GetIntent.getExtras().getString("POSTID");
         nickname = GetIntent.getExtras().getString("NICKNAME");
 
+        // 글 불러오기
         ReadPost task = new ReadPost();
         task.execute(post_id);
 
+        // 댓글 불러오기
+        ReadComment taskCom = new ReadComment();
+        taskCom.execute(post_id);
 
+
+        // 버튼 클릭 event
         btn = findViewById(R.id.Ok_btn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,13 +112,160 @@ public class PostActivity extends AppCompatActivity {
                 InsertComment taskcomment = new InsertComment();
                 taskcomment.execute(nickname,post_id,comment);
 
-
+                mAdapter.notifyDataSetChanged();
             }
         });
 
+
+
     }
 
-    // 댓글 달기
+    // 댓글 불러오기 layout
+    private void getData(){
+
+        List<String> listNick = new ArrayList<>();
+        List<String> listComment = new ArrayList<>();
+
+        for (int i = 0; i < mArrayList.size(); i++) {
+            listNick.add(mArrayList.get(i).get(TAG_NICKNAME));
+            listComment.add(mArrayList.get(i).get(TAG_COMMENT));
+        }
+
+
+        for (int i = 0; i < listNick.size(); i++) {
+            CommentData data = new CommentData();
+            data.setNick(listNick.get(i));
+            data.setComment(listComment.get(i));
+            mAdapter.addItem(data);
+        }
+
+        mAdapter.notifyDataSetChanged();
+
+    }
+
+    // 댓글 불러오기 DB
+    private class ReadComment extends AsyncTask<String, Void, String> {
+
+        ProgressDialog progressDialog;
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(PostActivity.this,
+                    "Please Wait", null, true, true);
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+
+
+            if (result == null || result.equals("")) {
+
+            } else {
+                mJsonString = result;
+                showResult();
+            }
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String serverURL = getString(R.string.sever) + "/FindComment.php";
+            String post_id = params[0];
+
+            String postParameters = "post_id=" + post_id;
+
+            try {
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                } else {
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                bufferedReader.close();
+                return sb.toString().trim();
+
+
+            } catch (Exception e) {
+
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+
+                return null;
+            }
+
+        }
+
+        private void showResult() {
+            try {
+                JSONObject jsonObject = new JSONObject(mJsonString);
+                JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON2);
+                mArrayList.clear();
+
+                for(int i=0; i<jsonArray.length(); i++){
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    JSONObject item = jsonArray.getJSONObject(i);
+
+                    String nickname = item.getString(TAG_NICKNAME);
+                    String comment = item.getString(TAG_COMMENT);
+
+                    hashMap.put(TAG_NICKNAME, nickname);
+                    hashMap.put(TAG_COMMENT, comment);
+
+                    mArrayList.add(hashMap);
+                }
+
+
+                getData();
+
+            } catch (JSONException e) {
+
+                Log.d(TAG, "showResult : ", e);
+            }
+
+        }
+    }
+
+
+
+    // 댓글 달기 DB
     class InsertComment extends AsyncTask<String, Void, String> {
         ProgressDialog progressDialog;
 
@@ -182,7 +357,7 @@ public class PostActivity extends AppCompatActivity {
 
 
 
-    // 글 불러오기
+    // 글 불러오기 DB
     private class ReadPost extends AsyncTask<String, Void, String> {
 
         ProgressDialog progressDialog;

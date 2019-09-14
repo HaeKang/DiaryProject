@@ -1,18 +1,11 @@
 package com.example.diaryproject.Fragment;
 
-import android.content.ClipData;
-import android.content.Intent;
-import android.provider.ContactsContract;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.diaryproject.R;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -56,7 +49,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
         ItemViewHolder(View itemView){
             super(itemView);
 
-            t1 = itemView.findViewById(R.id.title_listitem);
+            t1 = itemView.findViewById(R.id.comment_id);
             t2 = itemView.findViewById(R.id.nickname_listitem);
             t3 = itemView.findViewById(R.id.date_listitem);
 

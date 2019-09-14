@@ -18,7 +18,9 @@
         android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:scrollbars="none"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,11 +35,13 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:layout_editor_absoluteX="128dp"
-                tools:layout_editor_absoluteY="117dp" />
+                tools:layout_editor_absoluteY="117dp"
+                android:padding="10dp"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="31dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/stroke_down"
                 android:orientation="horizontal">
 
@@ -47,6 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:padding="10dp"
                     android:text="닉네임" />
 
                 <TextView
@@ -55,6 +60,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:padding="10dp"
                     android:text="날짜" />
 
             </LinearLayout>
@@ -62,6 +68,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/stroke_down"
                 android:orientation="vertical">
 
                 <ImageView
@@ -77,17 +84,21 @@
                     android:layout_height="wrap_content"
                     android:text="content"
                     tools:layout_editor_absoluteX="65dp"
-                    tools:layout_editor_absoluteY="193dp" />
+                    tools:layout_editor_absoluteY="193dp"
+                    android:layout_margin="20dp"
+                    />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/comment_recycler"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="320dp"
+                    android:padding="10dp" />
             </LinearLayout>
 
         </LinearLayout>
@@ -95,7 +106,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="395dp"
+        android:layout_width="match_parent"
         android:layout_height="65dp"
         android:layout_marginBottom="8dp"
         android:background="@android:color/background_light"
@@ -105,20 +116,22 @@
 
         <EditText
             android:id="@+id/comment_text"
-            android:layout_width="wrap_content"
+            android:layout_width="241dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:ems="10"
             android:hint="댓글"
-            android:inputType="text" />
+            android:inputType="text"
+            android:padding="10dp" />
 
         <Button
             android:id="@+id/Ok_btn"
-            android:layout_width="4dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:padding="10dp"
             android:text="입력" />
     </LinearLayout>
 
