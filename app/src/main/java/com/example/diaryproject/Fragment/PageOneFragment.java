@@ -200,7 +200,7 @@ public class PageOneFragment extends Fragment {
 
 
             if(result.equals("글이 없오") || result == null){
-                Toast.makeText(getActivity(),result,Toast.LENGTH_LONG).show();
+
             }
             else {
                 mJsonString = result;

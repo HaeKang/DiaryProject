@@ -37,6 +37,8 @@ public class ComRecyclerAdapter extends RecyclerView.Adapter<ComRecyclerAdapter.
         ComlistData.add(data);
     }
 
+    void resetItem() { ComlistData.clear();}
+
 
     class ItemViewHolderCom extends RecyclerView.ViewHolder{
         private TextView t1;

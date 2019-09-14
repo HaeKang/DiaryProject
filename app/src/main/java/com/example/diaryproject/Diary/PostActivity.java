@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -45,6 +47,7 @@ import java.util.List;
 public class PostActivity extends AppCompatActivity {
 
     String post_id;
+    String id;
 
     private String TAG = "PHPTEST";
     private static final String TAG_JSON = "post";
@@ -65,6 +68,7 @@ public class PostActivity extends AppCompatActivity {
     TextView tNickname;
     TextView tDate;
     ImageView tImage;
+    ImageView pImage;
     EditText tComment;
     Button btn;
 
@@ -80,9 +84,8 @@ public class PostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post);
 
         //댓글 ui
-        RecyclerView mRecycler = findViewById(R.id.comment_recycler);
+        final RecyclerView mRecycler = findViewById(R.id.comment_recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PostActivity.this);
-        linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         mRecycler.setLayoutManager(linearLayoutManager);
 
@@ -92,6 +95,8 @@ public class PostActivity extends AppCompatActivity {
         Intent GetIntent = getIntent();
         post_id = GetIntent.getExtras().getString("POSTID");
         nickname = GetIntent.getExtras().getString("NICKNAME");
+        id = GetIntent.getExtras().getString("USERID");
+
 
         // 글 불러오기
         ReadPost task = new ReadPost();
@@ -109,14 +114,42 @@ public class PostActivity extends AppCompatActivity {
             public void onClick(View v) {
                 tComment = findViewById(R.id.comment_text);
                 comment = tComment.getText().toString();
+
                 InsertComment taskcomment = new InsertComment();
                 taskcomment.execute(nickname,post_id,comment);
 
-                mAdapter.notifyDataSetChanged();
+                mAdapter.resetItem();
+
+                ReadComment taskCom2 = new ReadComment();
+                taskCom2.execute(post_id);
+
+                tComment.setText("");
+
             }
         });
 
 
+        //imageview 클릭
+        pImage = findViewById(R.id.pencil_image);
+        pImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final CharSequence[] items = {"글 삭제하기", "쪽지보내기"};
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PostActivity.this);
+                alertDialogBuilder.setTitle("글 수정삭제");
+                alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int index) {
+                        Toast.makeText(getApplicationContext(), items[index]+"선택했습니다", Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
+        });
 
     }
 
@@ -125,6 +158,8 @@ public class PostActivity extends AppCompatActivity {
 
         List<String> listNick = new ArrayList<>();
         List<String> listComment = new ArrayList<>();
+        listNick.clear();
+        listComment.clear();
 
         for (int i = 0; i < mArrayList.size(); i++) {
             listNick.add(mArrayList.get(i).get(TAG_NICKNAME));
@@ -177,6 +212,7 @@ public class PostActivity extends AppCompatActivity {
 
             String serverURL = getString(R.string.sever) + "/FindComment.php";
             String post_id = params[0];
+
 
             String postParameters = "post_id=" + post_id;
 
@@ -254,6 +290,7 @@ public class PostActivity extends AppCompatActivity {
 
 
                 getData();
+
 
             } catch (JSONException e) {
 

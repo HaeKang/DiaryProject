@@ -27,17 +27,30 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/title_text"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="타이틀"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                tools:layout_editor_absoluteX="128dp"
-                tools:layout_editor_absoluteY="117dp"
-                android:padding="10dp"
-                />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/title_text"
+                    android:layout_width="344dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:text="타이틀"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:layout_editor_absoluteX="128dp"
+                    tools:layout_editor_absoluteY="117dp" />
+
+                <ImageView
+                    android:id="@+id/pencil_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:srcCompat="@android:drawable/ic_menu_edit" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -91,14 +104,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="320dp"
                 android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/comment_recycler"
                     android:layout_width="match_parent"
-                    android:layout_height="320dp"
-                    android:padding="10dp" />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
         </LinearLayout>

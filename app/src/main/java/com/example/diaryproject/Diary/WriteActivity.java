@@ -19,6 +19,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -48,17 +49,20 @@ public class WriteActivity extends AppCompatActivity {
     private String nickname;
     private String title;
     private String content;
+    private String private_check = "false";
 
     private EditText etitle;
     private EditText econtent;
     private Button writeBtn;
     private ImageButton imageBtn;
+    private CheckBox privateCheck;
 
     private String TAG = "PHPTEST";
 
 
     private static final int gallery = 1;
     private String temp = "";
+
 
 
     @Override
@@ -77,7 +81,14 @@ public class WriteActivity extends AppCompatActivity {
         econtent = findViewById(R.id.content);
         writeBtn = findViewById(R.id.write_btn);
         imageBtn = findViewById(R.id.Picture_add);
+        privateCheck = findViewById(R.id.private_check);
 
+        privateCheck.setOnClickListener(new CheckBox.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                private_check = "true";
+            }
+        });
 
 
         //글쓰기 버튼
@@ -93,7 +104,7 @@ public class WriteActivity extends AppCompatActivity {
                 }
                 else {
                     Write task = new Write();
-                    task.execute(getString(R.string.sever) + "/Write.php", id, nickname, title, content, temp);
+                    task.execute(getString(R.string.sever) + "/Write.php", id, nickname, title, content, temp, private_check);
 
                     Intent intent = new Intent(WriteActivity.this, MainActivity.class);
                     intent.putExtra("user_id", id);
@@ -146,11 +157,12 @@ public class WriteActivity extends AppCompatActivity {
             String title = (String)params[3];
             String content = (String)params[4];
             String image = (String)params[5];
+            String private_check = params[6];
 
 
 
             String postParameters = "id=" + id + "&nickname=" + nick + "&title=" + title
-                    + "&content=" + content + "&image=" + image;
+                    + "&content=" + content + "&image=" + image + "&private=" + private_check;
 
 
             try {
