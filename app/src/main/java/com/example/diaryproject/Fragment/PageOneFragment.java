@@ -65,6 +65,7 @@ public class PageOneFragment extends Fragment {
         // Required empty public constructor
     }
 
+    // 생성자
     public static PageOneFragment newInstance(String p1, String p2){
         Bundle args = new Bundle();
         args.putString("user_id", p1);
@@ -98,6 +99,7 @@ public class PageOneFragment extends Fragment {
         mAdapter = new RecyclerAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
+        // list 클릭 event
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), mRecyclerView, new ClickListener(){
             @Override
             public void onClick(View view, int pos) {
@@ -114,6 +116,8 @@ public class PageOneFragment extends Fragment {
         return v;
     }
 
+
+    // recyclerview 데이터 추가
     private void getData(){
 
         List<String> listTitle = new ArrayList<>();
@@ -145,6 +149,7 @@ public class PageOneFragment extends Fragment {
         void onClick(View view, int pos);
     }
 
+    // recyclerview 클릭 class
     public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
         private GestureDetector detector;
         private PageOneFragment.ClickListener clickListener;
@@ -177,6 +182,7 @@ public class PageOneFragment extends Fragment {
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
         }
     }
+
 
     //DB 연결
     private class getAllPost extends AsyncTask<String, Void, String> {

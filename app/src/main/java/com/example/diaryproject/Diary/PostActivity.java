@@ -1,11 +1,13 @@
 package com.example.diaryproject.Diary;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +16,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.diaryproject.Fragment.Data;
+import com.example.diaryproject.Fragment.PageOneFragment;
 import com.example.diaryproject.Fragment.RecyclerAdapter;
 import com.example.diaryproject.MainActivity;
 import com.example.diaryproject.R;
@@ -74,14 +79,25 @@ public class PostActivity extends AppCompatActivity {
 
     String mJsonString;
 
-    String nickname;
+    String user_nickname;
+    String writer_nickname;
+    String comment_nickname;
     String comment;
+
+    String state_post = "find";
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+
+        Intent GetIntent = getIntent();
+        post_id = GetIntent.getExtras().getString("POSTID");
+        user_nickname = GetIntent.getExtras().getString("NICKNAME");
+        id = GetIntent.getExtras().getString("USERID");
+
 
         //댓글 ui
         final RecyclerView mRecycler = findViewById(R.id.comment_recycler);
@@ -92,22 +108,69 @@ public class PostActivity extends AppCompatActivity {
         mAdapter = new ComRecyclerAdapter();
         mRecycler.setAdapter(mAdapter);
 
-        Intent GetIntent = getIntent();
-        post_id = GetIntent.getExtras().getString("POSTID");
-        nickname = GetIntent.getExtras().getString("NICKNAME");
-        id = GetIntent.getExtras().getString("USERID");
+
+        // 댓글 recyclerview 클릭 이벤트
+        mRecycler.addOnItemTouchListener(new RecyclerTouchListenerComment(getApplicationContext(),
+                mRecycler, new ClickListenerComment(){
+
+            public void onClick(View view, int pos){
+
+            }
+
+            public void onLongClick(View view, int pos){
+                comment_nickname = mArrayList.get(pos).get(TAG_NICKNAME);
+                final String comment_delete = mArrayList.get(pos).get(TAG_COMMENT);
+
+                if(user_nickname.equals(comment_nickname)) {
+                    final CharSequence[] items_com = {"댓글 삭제하기", "쪽지보내기"};
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PostActivity.this);
+                    alertDialogBuilder.setTitle("댓글 수정삭제");
+                    alertDialogBuilder.setItems(items_com, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int index) {
+                            if(index == 0){
+
+                                // 댓글 삭제가 안됨 왜지????????????? post_id로는 되는디 nickname, comment로는 안됨 이유찾자...
+                                DeleteComment deletecomment = new DeleteComment();
+                                deletecomment.execute(comment_nickname, post_id, comment_delete);
+
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+                else{
+                    final CharSequence[] items_com = {"쪽지보내기"};
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PostActivity.this);
+                    alertDialogBuilder.setTitle("댓글 수정삭제");
+                    alertDialogBuilder.setItems(items_com, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int index) {
+                            Toast.makeText(getApplicationContext(), items_com[index]+"선택했습니다", Toast.LENGTH_LONG).show();
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+
+            }
+
+        }));
 
 
         // 글 불러오기
         ReadPost task = new ReadPost();
-        task.execute(post_id);
+        task.execute(post_id, state_post);
 
         // 댓글 불러오기
         ReadComment taskCom = new ReadComment();
         taskCom.execute(post_id);
 
 
-        // 버튼 클릭 event
+        // 댓글 입력 버튼 클릭 event
         btn = findViewById(R.id.Ok_btn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,7 +179,7 @@ public class PostActivity extends AppCompatActivity {
                 comment = tComment.getText().toString();
 
                 InsertComment taskcomment = new InsertComment();
-                taskcomment.execute(nickname,post_id,comment);
+                taskcomment.execute(user_nickname,post_id,comment);
 
                 mAdapter.resetItem();
 
@@ -134,24 +197,94 @@ public class PostActivity extends AppCompatActivity {
         pImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final CharSequence[] items = {"글 삭제하기", "쪽지보내기"};
+                if(user_nickname.equals(writer_nickname)) {
+                    final CharSequence[] items = {"글 삭제하기", "쪽지보내기"};
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PostActivity.this);
+                    alertDialogBuilder.setTitle("글 수정삭제");
+                    alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int index) {
+                            if(index == 0){
+                                state_post  = "delete";
+                                ReadPost deletetask = new ReadPost();
+                                deletetask.execute(post_id, state_post);
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PostActivity.this);
-                alertDialogBuilder.setTitle("글 수정삭제");
-                alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int index) {
-                        Toast.makeText(getApplicationContext(), items[index]+"선택했습니다", Toast.LENGTH_LONG).show();
-                        dialog.dismiss();
-                    }
-                });
+                }
+                else{
+                    final CharSequence[] items = {"쪽지보내기"};
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PostActivity.this);
+                    alertDialogBuilder.setTitle("글 수정삭제");
+                    alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int index) {
+                            Toast.makeText(getApplicationContext(), items[index]+"선택했습니다", Toast.LENGTH_LONG).show();
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
 
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
             }
         });
 
+
+
+
     }
+
+    public interface ClickListenerComment{
+        void onClick(View view, int pos);
+        void onLongClick(View view, int pos);
+    }
+
+    public static class RecyclerTouchListenerComment implements RecyclerView.OnItemTouchListener{
+        private GestureDetector gestureDetector;
+        private PostActivity.ClickListenerComment clickListener;
+
+        public RecyclerTouchListenerComment(Context context, final RecyclerView recyclerView, final PostActivity.ClickListenerComment clickListener){
+            this.clickListener = clickListener;
+            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
+               public boolean onSingleTapUp(MotionEvent e){
+                   return true;
+               }
+
+               public void onLongPress(MotionEvent e){
+                   View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                   if(child != null && clickListener != null){
+                       clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
+                   }
+               }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+            if(child != null && clickListener != null && gestureDetector.onTouchEvent(e)){
+                clickListener.onClick(child, rv.getChildAdapterPosition(child));
+            }
+
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+        }
+    }
+
 
     // 댓글 불러오기 layout
     private void getData(){
@@ -201,8 +334,9 @@ public class PostActivity extends AppCompatActivity {
             if (result == null || result.equals("")) {
 
             } else {
-                mJsonString = result;
-                showResult();
+                    mJsonString = result;
+                    showResult();
+
             }
         }
 
@@ -212,11 +346,11 @@ public class PostActivity extends AppCompatActivity {
 
             String serverURL = getString(R.string.sever) + "/FindComment.php";
             String post_id = params[0];
-
-
             String postParameters = "post_id=" + post_id;
 
+
             try {
+
                 URL url = new URL(serverURL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
@@ -331,6 +465,7 @@ public class PostActivity extends AppCompatActivity {
             String post_id = (String)params[1];
             String comment = (String)params[2];
 
+
             String serverURL = getString(R.string.sever) + "/comment.php";
             String postParameters = "nickname=" + nickname + "&post_id=" + post_id + "&comment=" + comment;
 
@@ -393,6 +528,97 @@ public class PostActivity extends AppCompatActivity {
     }
 
 
+    // 댓글 삭제 DB
+    class DeleteComment extends AsyncTask<String, Void, String> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = ProgressDialog.show(PostActivity.this,
+                    "Please Wait", null, true, true);
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            Log.d(TAG, "POST response  - " + result);
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String nickname = (String)params[0];
+            String post_id = (String)params[1];
+            String comment = (String)params[2];
+
+
+            String serverURL = getString(R.string.sever) + "/deleteComment.php";
+            String postParameters = "nickname=" + nickname + "&post_id=" + post_id + "&comment=" + comment;
+
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.connect();
+
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "POST response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+
+
+                bufferedReader.close();
+
+
+                return sb.toString();
+
+
+            } catch (Exception e) {
+
+                Log.d(TAG, "InsertData: Error ", e);
+
+                return new String("Error: " + e.getMessage());
+            }
+
+        }
+    }
+
 
     // 글 불러오기 DB
     private class ReadPost extends AsyncTask<String, Void, String> {
@@ -415,10 +641,17 @@ public class PostActivity extends AppCompatActivity {
 
 
             if (result == null || result.equals("")) {
-                Toast.makeText(PostActivity.this, "안됨", Toast.LENGTH_LONG).show();
+                Toast.makeText(PostActivity.this, "글 삭제 완료", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(PostActivity.this, MainActivity.class);
+                intent.putExtra("user_id", id);
+                intent.putExtra("user_nickname",user_nickname);
+                startActivity(intent);
+                finish();
             } else {
-                mJsonString = result;
-                showResult();
+                if (state_post.equals("find")) {
+                    mJsonString = result;
+                    showResult();
+                }
             }
         }
 
@@ -428,9 +661,10 @@ public class PostActivity extends AppCompatActivity {
 
             String serverURL = getString(R.string.sever) + "/FindPost.php";
             String post_id = params[0];
+            String state = params[1];
 
 
-            String postParameters = "post_id=" + post_id;
+            String postParameters = "post_id=" + post_id + "&state=" + state;
 
 
             try {
@@ -502,6 +736,7 @@ public class PostActivity extends AppCompatActivity {
                 String content = item.getString(TAG_CONTENT);
                 Bitmap image = StringToBitMap(item.getString(TAG_IMAGE));
 
+                writer_nickname = nickname;
 
                 tNickname = findViewById(R.id.user_text);
                 tTitle = findViewById(R.id.title_text);
