@@ -58,6 +58,7 @@ public class PageTwoFragment extends Fragment {
     private static final String TAG_NICKNAME ="nickname";
     private static final String TAG_TITLE = "title";
     private static final String TAG_POSTID ="post_id";
+    private static final String TAG_DATE ="date";
     String mJsonString;
 
 
@@ -159,11 +160,14 @@ public class PageTwoFragment extends Fragment {
         List<String> listTitle = new ArrayList<>();
         List<String> listNick = new ArrayList<>();
         List<String> listpostid = new ArrayList<>();
+        List<String> listdate = new ArrayList<>();
+
 
         for (int i = 0; i < mArrayList.size(); i++) {
             listTitle.add(mArrayList.get(i).get(TAG_TITLE));
             listNick.add(mArrayList.get(i).get(TAG_NICKNAME));
             listpostid.add(mArrayList.get(i).get(TAG_POSTID));
+            listdate.add(mArrayList.get(i).get(TAG_DATE));
         }
 
 
@@ -172,6 +176,7 @@ public class PageTwoFragment extends Fragment {
             data.setTitle(listTitle.get(i));
             data.setNickname(listNick.get(i));
             data.setPostid(listpostid.get(i));
+            data.setDate(listdate.get(i));
             mAdapter.addItem(data);
         }
 
@@ -291,10 +296,13 @@ public class PageTwoFragment extends Fragment {
                     String title = item.getString(TAG_TITLE);
                     int post_id  = item.getInt(TAG_POSTID);
                     String postId = Integer.toString(post_id);
+                    String date = item.getString(TAG_DATE);
+
 
                     hashMap.put(TAG_NICKNAME, nickname);
                     hashMap.put(TAG_TITLE, title);
                     hashMap.put(TAG_POSTID,postId);
+                    hashMap.put(TAG_DATE, date);
 
                     mArrayList.add(hashMap);
                 }

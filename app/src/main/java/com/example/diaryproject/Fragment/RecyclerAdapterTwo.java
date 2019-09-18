@@ -56,7 +56,7 @@ public class RecyclerAdapterTwo extends RecyclerView.Adapter<RecyclerAdapterTwo.
         void onBind(Data data){
             t1.setText(data.getTitle());
             t2.setText(data.getNickname());
-            t3.setText(data.getPostid());
+            t3.setText(data.getDate());
         }
 
     }

@@ -9,6 +9,7 @@ public class Data {
     private String title;
     private String nickname;
     private String postid;
+    private String date;
 
     public String getTitle(){
         return title;
@@ -33,6 +34,10 @@ public class Data {
     public void setPostid(String postid){
         this.postid = postid;
     }
+
+    public String getDate(){ return date;}
+
+    public void setDate(String date) { this.date = date;}
 
 }
 
