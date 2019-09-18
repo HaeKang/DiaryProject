@@ -40,8 +40,6 @@ public class PageThreeFragment extends Fragment {
         String nickname = getArguments().getString("user_nick");
 
 
-
-
         return v;
     }
 

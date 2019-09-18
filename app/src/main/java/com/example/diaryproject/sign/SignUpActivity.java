@@ -2,10 +2,12 @@ package com.example.diaryproject.sign;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +46,10 @@ public class SignUpActivity extends AppCompatActivity {
         Id = findViewById(R.id.Id);
         Pw = findViewById(R.id.Pw);
         Nickname = findViewById(R.id.Nickname);
+
+
+        Id.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        Pw.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 
 
         Signup.setOnClickListener(new View.OnClickListener() {

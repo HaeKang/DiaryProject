@@ -154,7 +154,6 @@ public class PostActivity extends AppCompatActivity {
                                 intentNoteCom.putExtra("USERNICK", user_nickname);
                                 intentNoteCom.putExtra("COMMENTNICK", comment_nickname);
                                 startActivity(intentNoteCom);
-                                finish();
                             }
                             dialog.dismiss();
                         }
@@ -235,7 +234,6 @@ public class PostActivity extends AppCompatActivity {
                                 intentNoteWri.putExtra("USERNICK", user_nickname);
                                 intentNoteWri.putExtra("WRITENICK", writer_nickname);
                                 startActivity(intentNoteWri);
-                                finish();
                             }
                             dialog.dismiss();
                         }
