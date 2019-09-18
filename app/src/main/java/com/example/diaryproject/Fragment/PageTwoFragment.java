@@ -4,6 +4,7 @@ package com.example.diaryproject.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -24,8 +25,10 @@ import android.widget.Toast;
 
 import com.example.diaryproject.Diary.PostActivity;
 import com.example.diaryproject.Diary.WriteActivity;
+import com.example.diaryproject.MainActivity;
 import com.example.diaryproject.R;
 import com.example.diaryproject.StartActivity;
+import com.example.diaryproject.sign.SignInActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,10 +61,10 @@ public class PageTwoFragment extends Fragment {
     String mJsonString;
 
 
+
     public PageTwoFragment() {
 
     }
-
 
     // id, nickname 불러오기
     public static PageTwoFragment newInstance(String p1, String p2){
@@ -82,6 +85,8 @@ public class PageTwoFragment extends Fragment {
         TextView id_tv = v.findViewById(R.id.id_textview);
         TextView nick_tv = v.findViewById(R.id.nick_textview);
         Button write = v.findViewById(R.id.write);
+        Button logout = v.findViewById(R.id.logout_btn);
+
 
         final String id = getArguments().getString("user_id");
         final String nickname = getArguments().getString("user_nick");
@@ -89,6 +94,7 @@ public class PageTwoFragment extends Fragment {
         id_tv.setText(id);
         nick_tv.setText(nickname);
 
+        //글쓰기 버튼 클릭
         write.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View view){
                 Intent intent = new Intent(getActivity(), WriteActivity.class);
@@ -98,9 +104,25 @@ public class PageTwoFragment extends Fragment {
             }
         });
 
+        // 로그아웃
+        logout.setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View view){
+                SharedPreferences loginInfo = getActivity().getSharedPreferences("setting",0);
+                SharedPreferences.Editor editor = loginInfo.edit();
+                editor.clear();
+                editor.commit();
+
+                Intent intent = new Intent(getActivity(), SignInActivity.class);
+                startActivity(intent);
+                ((MainActivity)getActivity()).finishMain();
+
+                Toast.makeText(getActivity(),"로그아웃 했습니다.",Toast.LENGTH_LONG).show();
+
+            }
+        });
+
 
         //글 목록 보기
-
         getMyPost task = new getMyPost();
         task.execute(id);
 
@@ -129,7 +151,6 @@ public class PageTwoFragment extends Fragment {
         return v;
 
     }
-
 
 
 

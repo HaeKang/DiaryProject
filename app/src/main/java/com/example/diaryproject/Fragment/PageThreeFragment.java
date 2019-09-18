@@ -39,7 +39,9 @@ public class PageThreeFragment extends Fragment {
         String id = getArguments().getString("user_id");
         String nickname = getArguments().getString("user_nick");
 
-        // Inflate the layout for this fragment
+
+
+
         return v;
     }
 

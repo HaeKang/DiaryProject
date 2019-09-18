@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Base64;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -122,7 +123,7 @@ public class PostActivity extends AppCompatActivity {
                 final String comment_delete = mArrayList.get(pos).get(TAG_COMMENT);
 
                 if(user_nickname.equals(comment_nickname)) {
-                    final CharSequence[] items_com = {"댓글 삭제하기", "쪽지보내기"};
+                    final CharSequence[] items_com = {"댓글 삭제하기"};
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PostActivity.this);
                     alertDialogBuilder.setTitle("댓글 수정삭제");
                     alertDialogBuilder.setItems(items_com, new DialogInterface.OnClickListener() {
@@ -148,7 +149,13 @@ public class PostActivity extends AppCompatActivity {
                     alertDialogBuilder.setItems(items_com, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int index) {
-                            Toast.makeText(getApplicationContext(), items_com[index]+"선택했습니다", Toast.LENGTH_LONG).show();
+                            if(index == 0){
+                                Intent intentNoteCom = new Intent(getApplicationContext(), NoteSendActivity.class);
+                                intentNoteCom.putExtra("USERNICK", user_nickname);
+                                intentNoteCom.putExtra("COMMENTNICK", comment_nickname);
+                                startActivity(intentNoteCom);
+                                finish();
+                            }
                             dialog.dismiss();
                         }
                     });
@@ -198,7 +205,7 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(user_nickname.equals(writer_nickname)) {
-                    final CharSequence[] items = {"글 삭제하기", "쪽지보내기"};
+                    final CharSequence[] items = {"글 삭제하기"};
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PostActivity.this);
                     alertDialogBuilder.setTitle("글 수정삭제");
                     alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
@@ -223,7 +230,13 @@ public class PostActivity extends AppCompatActivity {
                     alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int index) {
-                            Toast.makeText(getApplicationContext(), items[index]+"선택했습니다", Toast.LENGTH_LONG).show();
+                            if(index == 0){
+                                Intent intentNoteWri = new Intent(getApplicationContext(), NoteSendActivity.class);
+                                intentNoteWri.putExtra("USERNICK", user_nickname);
+                                intentNoteWri.putExtra("WRITENICK", writer_nickname);
+                                startActivity(intentNoteWri);
+                                finish();
+                            }
                             dialog.dismiss();
                         }
                     });

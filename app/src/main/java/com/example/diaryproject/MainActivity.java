@@ -50,6 +50,12 @@ public class MainActivity extends FragmentActivity {
 
     }
 
+
+    public void finishMain(){
+        finish();
+    }
+
+
     //뒤로버튼 event
     private long time = 0;
     public void onBackPressed(){

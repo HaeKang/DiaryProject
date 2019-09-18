@@ -1,12 +1,16 @@
 package com.example.diaryproject.sign;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +37,7 @@ public class SignInActivity extends AppCompatActivity {
     private Button signup;
     private TextView id;
     private TextView pw;
+    private CheckBox autologin;
 
     private String TAG = "PHPTEST";
     private static final String TAG_JSON="webnautes";
@@ -53,27 +58,56 @@ public class SignInActivity extends AppCompatActivity {
         id = findViewById(R.id.edit_username);
         pw = findViewById(R.id.edit_password);
 
+        autologin = findViewById(R.id.autologin);
+
+        final SharedPreferences loginInfo = getSharedPreferences("setting",0);
+        final SharedPreferences.Editor editor = loginInfo.edit();
+
+        String auto_loginid = loginInfo.getString("id",null);
 
 
-        signin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Login task = new Login();
-                task.execute(id.getText().toString(), pw.getText().toString());
-            }
-        });
 
-        signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
-                startActivity(intent);
-            }
-        });
+        // 자동로그인 정보 X
+        if(auto_loginid == null){
+
+            signin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Login task = new Login();
+                    task.execute(id.getText().toString(), pw.getText().toString());
+
+                    // 자동로그인
+                    if(autologin.isChecked()){
+                        editor.putString("id", id.getText().toString());
+                        editor.putString("password",pw.getText().toString());
+                        editor.commit();
+                    }
+                }
+            });
+
+            signup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+
+        else{
+            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+            intent.putExtra("user_id", loginInfo.getString("id",""));
+            intent.putExtra("user_nickname",loginInfo.getString("password",""));
+            StyleableToast.makeText(getApplicationContext(), "자동로그인 했습니다", Toast.LENGTH_LONG, R.style.sign).show();
+            startActivity(intent);
+            finish();
+        }
 
     }
 
 
+
+    // 로그인DB
     private class Login extends AsyncTask<String, Void, String> {
 
         ProgressDialog progressDialog;
@@ -179,15 +213,16 @@ public class SignInActivity extends AppCompatActivity {
 
                 JSONObject item = jsonArray.getJSONObject(0);
 
-                String id = item.getString(TAG_ID);
+                final String id = item.getString(TAG_ID);
                 String pw = item.getString(TAG_PW);
-                String nickname = item.getString(TAG_NICKNAME);
+                final String nickname = item.getString(TAG_NICKNAME);
 
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("user_id", id);
-                intent.putExtra("user_pw",pw);
                 intent.putExtra("user_nickname",nickname);
+
+
                 StyleableToast.makeText(getApplicationContext(), "반갑습니다 " + nickname + " 님!", Toast.LENGTH_LONG, R.style.sign).show();
                 startActivity(intent);
                 finish();

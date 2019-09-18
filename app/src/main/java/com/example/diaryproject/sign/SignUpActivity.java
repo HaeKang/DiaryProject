@@ -31,6 +31,9 @@ public class SignUpActivity extends AppCompatActivity {
 
     private String TAG = "PHPTEST";
 
+    private String state_db = "";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,18 +56,21 @@ public class SignUpActivity extends AppCompatActivity {
 
 
                 InsertData task = new InsertData();
-                task.execute(getString(R.string.sever)+ "/SignUp.php", id, pw, nickname);
+                task.execute(id, pw, nickname);
 
                 Id.setText("");
                 Pw.setText("");
                 Nickname.setText("");
 
 
-                if(!id.equals("") && !pw.equals("") && !nickname.equals("")) {
+                if(!id.equals("") && !pw.equals("") && !nickname.equals("") && state_db.equals("ok")) {
                     Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                     StyleableToast.makeText(getApplicationContext(), "회원가입이 완료되었습니다.", Toast.LENGTH_LONG, R.style.sign).show();
                     startActivity(intent);
                     finish();
+                }
+                else{
+                    StyleableToast.makeText(getApplicationContext(), "아이디, 닉네임 중복됩니다 다른 아이디와 닉네임을 사용해주세요", Toast.LENGTH_LONG, R.style.sign).show();
                 }
             }
         });
@@ -87,7 +93,6 @@ public class SignUpActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             progressDialog.dismiss();
-            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
             Log.d(TAG, "POST response  - " + result);
         }
 
@@ -95,11 +100,11 @@ public class SignUpActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
 
-            String id = (String)params[1];
-            String pw = (String)params[2];
-            String nick = (String)params[3];
+            String id = (String)params[0];
+            String pw = (String)params[1];
+            String nick = (String)params[2];
 
-            String serverURL = (String)params[0];
+            String serverURL = getString(R.string.sever)+ "/SignUp.php";
             String postParameters = "id=" + id + "&pw=" + pw + "&nickname=" + nick;
 
 
@@ -145,21 +150,15 @@ public class SignUpActivity extends AppCompatActivity {
 
 
                 bufferedReader.close();
-
-
+                state_db = "ok";
                 return sb.toString();
 
 
             } catch (Exception e) {
-
                 Log.d(TAG, "InsertData: Error ", e);
-
                 return new String("Error: " + e.getMessage());
             }
 
         }
     }
-
-
-
 }

@@ -60,6 +60,12 @@
                 android:textColorHint="#ffffff"
                 android:typeface="normal" />
 
+            <CheckBox
+                android:id="@+id/autologin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="자동로그인" />
+
             <Button
                 android:id="@+id/SignInOk_Btn"
                 android:layout_width="match_parent"
