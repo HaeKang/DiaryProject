@@ -109,7 +109,6 @@ public class WriteActivity extends AppCompatActivity {
                     Intent intent = new Intent(WriteActivity.this, MainActivity.class);
                     intent.putExtra("user_id", id);
                     intent.putExtra("user_nickname", nickname);
-                    StyleableToast.makeText(getApplicationContext(), "글쓰기 완료!", Toast.LENGTH_LONG, R.style.sign).show();
                     startActivity(intent);
                     finish();
                 }
@@ -144,6 +143,12 @@ public class WriteActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             progressDialog.dismiss();
+
+            if(result.equals("글 추가 완성")) {
+                StyleableToast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG, R.style.sign).show();
+            } else{
+                StyleableToast.makeText(getApplicationContext(), "글은 하루에 한번만 쓸 수 있습니다", Toast.LENGTH_LONG, R.style.sign).show();
+            }
             Log.d(TAG, "POST response  - " + result);
         }
 
@@ -207,8 +212,6 @@ public class WriteActivity extends AppCompatActivity {
 
 
                 bufferedReader.close();
-
-
                 return sb.toString();
 
 

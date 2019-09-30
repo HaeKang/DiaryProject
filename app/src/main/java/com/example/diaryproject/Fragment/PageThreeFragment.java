@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.diaryproject.R;
 
@@ -38,6 +39,12 @@ public class PageThreeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_page_three, container, false);
         String id = getArguments().getString("user_id");
         String nickname = getArguments().getString("user_nick");
+
+
+        TextView tw;
+        tw = v.findViewById(R.id.NoteMainText);
+        tw.setText(id + "님의 쪽지함");
+
 
 
         return v;

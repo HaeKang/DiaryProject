@@ -12,83 +12,82 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/profile_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="176dp"
-                    android:layout_height="163dp"
-                    android:src="@color/colorPrimary" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/nick_textview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="80dp"
-                    android:fontFamily="@font/nanumsquareroundr"
-                    android:gravity="center"
-                    android:text="TextView" />
-
-                <TextView
-                    android:id="@+id/id_textview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanumsquareroundr"
-                    android:gravity="center"
-                    android:text="TextView" />
+                android:id="@+id/profile_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <Button
-                        android:id="@+id/write"
-                        android:layout_width="114dp"
+                    <TextView
+                        android:id="@+id/nick_textview"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:fontFamily="@font/nanumsquareroundr"
                         android:gravity="center"
-                        android:text="글쓰기" />
+                        android:text="TextView" />
 
-                    <Button
-                        android:id="@+id/logout_btn"
-                        android:layout_width="114dp"
+                    <TextView
+                        android:id="@+id/id_textview"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="로그아웃" />
+                        android:fontFamily="@font/nanumsquareroundr"
+                        android:gravity="center"
+                        android:text="TextView" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/write"
+                            android:layout_width="206dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="글쓰기" />
+
+                        <Button
+                            android:id="@+id/logout_btn"
+                            android:layout_width="114dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="로그아웃" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/Linear_my"
-            android:layout_width="match_parent"
-            android:layout_height="556dp"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/profile_layout"
-            tools:layout_editor_absoluteX="0dp">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/Recycler_my"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/Linear_my"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/Recycler_my"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+            </ScrollView>
         </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </FrameLayout>

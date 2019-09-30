@@ -556,7 +556,12 @@ public class PostActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             progressDialog.dismiss();
-            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            Toast.makeText(PostActivity.this, "댓글 삭제 완료", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(PostActivity.this, MainActivity.class);
+            intent.putExtra("user_id", id);
+            intent.putExtra("user_nickname",user_nickname);
+            startActivity(intent);
+            finish();
             Log.d(TAG, "POST response  - " + result);
         }
 
@@ -570,7 +575,7 @@ public class PostActivity extends AppCompatActivity {
 
 
             String serverURL = getString(R.string.sever) + "/deleteComment.php";
-            String postParameters = "nickname=" + nickname + "&post_id=" + post_id + "&comment=" + comment;
+            String postParameters = "nickname=" + nickname + "&post_id=" + post_id + "&comment_user=" + comment;
 
 
             try {

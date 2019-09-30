@@ -89,8 +89,12 @@ public class PageOneFragment extends Fragment {
         task.execute();
 
         RecyclerView mRecyclerView = v.findViewById(R.id.recyclerView);
-        //mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
 
+        // grid layout
+        //GridLayoutManager mGridLayoutManager = new GridLayoutManager(getActivity(), 3);
+        //mRecyclerView.setLayoutManager(mGridLayoutManager);
+
+        //일반 layout
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);

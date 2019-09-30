@@ -14,9 +14,6 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.diaryproject.Fragment.FragmentAdapter;
-import com.example.diaryproject.Fragment.PageOneFragment;
-import com.example.diaryproject.Fragment.PageThreeFragment;
-import com.example.diaryproject.Fragment.PageTwoFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.muddzdev.styleabletoast.StyleableToast;
 

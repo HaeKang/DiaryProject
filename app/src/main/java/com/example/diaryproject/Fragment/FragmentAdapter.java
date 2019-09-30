@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 public class FragmentAdapter extends FragmentPagerAdapter {
 
-    private static int PAGE_NUMBER = 3;
+    private static int PAGE_NUMBER = 4;
     private String id_a;
     private String nick_a;
 
@@ -28,6 +28,8 @@ public class FragmentAdapter extends FragmentPagerAdapter {
                 return PageTwoFragment.newInstance(id_a,nick_a);
             case 2:
                 return PageThreeFragment.newInstance(id_a,nick_a);
+            case 3:
+                return PageFourFragment.newInstance(id_a,nick_a);
             default:
                 return null;
         }
@@ -47,7 +49,9 @@ public class FragmentAdapter extends FragmentPagerAdapter {
                 return "두번째";
             case 2:
                 return "세번째";
-                default:
+            case 3:
+                return "네번째";
+            default:
                     return null;
         }
     }
