@@ -1,7 +1,9 @@
 package com.example.diaryproject.Fragment;
 
-import android.content.Context;
-import android.widget.Toast;
+import com.example.diaryproject.Fragment.PageFour.PageFourFragment;
+import com.example.diaryproject.Fragment.PageOne.PageOneFragment;
+import com.example.diaryproject.Fragment.PageThree.PageThreeFragment;
+import com.example.diaryproject.Fragment.PageTwo.PageTwoFragment;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;

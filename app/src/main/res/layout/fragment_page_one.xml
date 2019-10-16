@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Fragment.PageOneFragment">
+    tools:context=".Fragment.PageOne.PageOneFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

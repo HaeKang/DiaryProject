@@ -1,16 +1,13 @@
-package com.example.diaryproject.Fragment;
+package com.example.diaryproject.Fragment.PageOne;
 
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.pdf.PdfDocument;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,14 +17,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.example.diaryproject.Diary.PostActivity;
-import com.example.diaryproject.MainActivity;
+import com.example.diaryproject.Fragment.Data;
 import com.example.diaryproject.R;
-import com.example.diaryproject.sign.SignInActivity;
-import com.muddzdev.styleabletoast.StyleableToast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,12 +29,9 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 

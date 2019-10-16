@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Diary.NoteSendActivity"></activity>
+        <activity android:name=".Diary.NoteActivity"></activity>
+        <activity android:name=".Diary.NoteSendActivity" />
         <activity android:name=".Diary.PostActivity" />
         <activity android:name=".Diary.WriteActivity" />
         <activity android:name=".sign.SignUpActivity" />

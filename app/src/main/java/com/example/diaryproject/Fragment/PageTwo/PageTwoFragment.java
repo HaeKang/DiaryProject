@@ -1,22 +1,18 @@
-package com.example.diaryproject.Fragment;
+package com.example.diaryproject.Fragment.PageTwo;
 
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -25,15 +21,15 @@ import android.widget.Toast;
 
 import com.example.diaryproject.Diary.PostActivity;
 import com.example.diaryproject.Diary.WriteActivity;
+import com.example.diaryproject.Fragment.Data;
+import com.example.diaryproject.Fragment.PageOne.PageOneFragment;
 import com.example.diaryproject.MainActivity;
 import com.example.diaryproject.R;
-import com.example.diaryproject.StartActivity;
 import com.example.diaryproject.sign.SignInActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
