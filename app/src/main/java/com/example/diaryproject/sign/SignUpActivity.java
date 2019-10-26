@@ -14,8 +14,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.diaryproject.MainActivity;
 import com.example.diaryproject.R;
 import com.muddzdev.styleabletoast.StyleableToast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -40,9 +45,10 @@ public class SignUpActivity extends AppCompatActivity {
     private boolean check_nick_state = false;
 
     private String TAG = "PHPTEST";
+    private String TAG_JSON = "stateIdNick";
+    String mJsonString;
 
     private String state_db = "";
-
 
     private String id = "";
     private String pw = "";
@@ -75,14 +81,16 @@ public class SignUpActivity extends AppCompatActivity {
         idcheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 state_check = "id";
                 id = Id.getText().toString();
 
-                if(check_id_state){
-                    StyleableToast.makeText(getApplicationContext(), "아이디 사용가능", Toast.LENGTH_LONG, R.style.sign).show();
-                } else{
-                    Id.setText("");
-                    Id.requestFocus();
+                if( id.equals(null)){
+                    Toast.makeText(getApplicationContext(),"아이디를 입력하세요",Toast.LENGTH_LONG).show();
+                }
+                else {
+                    CheckIdNick taskId = new CheckIdNick();
+                    taskId.execute(state_check, id, "");
                 }
             }
         });
@@ -92,16 +100,17 @@ public class SignUpActivity extends AppCompatActivity {
         nickcheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 state_check = "nickname";
                 nickname = Nickname.getText().toString();
 
-                if(check_nick_state){
-                    StyleableToast.makeText(getApplicationContext(), "닉네임 사용 가능", Toast.LENGTH_LONG, R.style.sign).show();
-                } else{
-                    Nickname.setText("");
-                    Nickname.requestFocus();
+                if(nickname.equals(null)) {
+                    Toast.makeText(getApplicationContext(),"닉네임을 입력하세요",Toast.LENGTH_LONG).show();
                 }
-
+                else{
+                    CheckIdNick taskNick = new CheckIdNick();
+                    taskNick.execute(state_check, "", nickname);
+                }
             }
         });
 
@@ -112,7 +121,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(check_id_state == true && check_nick_state == true) {
+                if(check_id_state && check_nick_state) {
                     id = Id.getText().toString();
                     pw = Pw.getText().toString();
                     nickname = Nickname.getText().toString();
@@ -244,10 +253,153 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     // 아이디 닉네임 중복확인 CheckIdNick.php
-        // state_check + id + nickname 받아야함
-        // stateIdNick 배열 받음 ok면 사용가능 ,no면 사용불가능
-        // ok면 check_id_state & check_nick_state  true로 변경
 
+    private class CheckIdNick extends AsyncTask<String, Void, String> {
+
+        ProgressDialog progressDialog;
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = ProgressDialog.show(SignUpActivity.this,
+                    "Please Wait", null, true, true);
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+
+
+            if(result == null){
+                Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
+            }
+            else {
+                mJsonString = result;
+                showResult();
+            }
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String state_check = params[0];
+            String id = params[1];
+            String nickname = params[2];
+
+            String serverURL = getString(R.string.sever) + "/CheckIdNick.php";
+            String postParameters = "state_check=" + state_check + "&id=" + id + "&nickname=" + nickname;
+
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+
+
+                bufferedReader.close();
+
+
+                return sb.toString().trim();
+
+
+            } catch (Exception e) {
+
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+
+                return null;
+            }
+
+        }
+
+        private void showResult(){
+            try {
+
+                Id = findViewById(R.id.Id);
+                Nickname = findViewById(R.id.Nickname);
+
+                JSONObject jsonObject = new JSONObject(mJsonString);
+                JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+                JSONObject item = jsonArray.getJSONObject(0);
+
+                if(item.isNull("nick_check_state")) {
+
+                    final String id_check = item.getString("id_check_state");
+                    Log.d("test",id_check);
+
+                    if(id_check.equals("ok")){
+                        check_id_state = true;
+                        StyleableToast.makeText(getApplicationContext(), "아이디 사용가능", Toast.LENGTH_LONG, R.style.sign).show();
+                    }else{
+                        check_id_state = false;
+                        Id.setText("");
+                        Id.requestFocus();
+                    }
+
+                } else {
+
+                    final String nick_check = item.getString("nick_check_state");
+
+                    if(nick_check.equals("ok")){
+                        check_nick_state = true;
+                        StyleableToast.makeText(getApplicationContext(), "닉네임 사용 가능", Toast.LENGTH_LONG, R.style.sign).show();
+                    }else{
+                        check_nick_state = false;
+                        Nickname.setText("");
+                        Nickname.requestFocus();
+                    }
+                }
+
+
+            } catch (JSONException e) {
+
+                Log.d(TAG, "showResult : ", e);
+            }
+        }
+
+    }
 
 
 }
