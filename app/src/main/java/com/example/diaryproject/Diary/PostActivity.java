@@ -122,7 +122,6 @@ public class PostActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int index) {
                             if(index == 0){
 
-                                // 댓글 삭제가 안됨 왜지????????????? post_id로는 되는디 nickname, comment로는 안됨 이유찾자...
                                 DeleteComment deletecomment = new DeleteComment();
                                 deletecomment.execute(comment_nickname, post_id, comment_delete);
 

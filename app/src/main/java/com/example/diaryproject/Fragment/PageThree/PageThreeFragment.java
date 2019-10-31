@@ -1,8 +1,10 @@
 package com.example.diaryproject.Fragment.PageThree;
 
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -98,6 +100,7 @@ public class PageThreeFragment extends Fragment {
         mAdapter = new RecyclerAdapterThree();
         mRecyclerView.setAdapter(mAdapter);
 
+
         // 클릭 이벤트
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), mRecyclerView, new ClickListener(){
             @Override
@@ -112,16 +115,50 @@ public class PageThreeFragment extends Fragment {
             }
         }));
 
-
-
-        // 길게 누를 시
-
-
-
-
-
         return v;
     }
+
+
+    //클릭Listener
+    public interface ClickListener{
+        void onClick(View view, int pos);
+    }
+
+    //recyclerview touch 이벤트
+    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+        private GestureDetector detector;
+        private PageThreeFragment.ClickListener clickListener;
+
+        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final PageThreeFragment.ClickListener clickListener) {
+            this.clickListener = clickListener;
+            detector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
+                public boolean onSingleTapUp(MotionEvent e){
+                    return true;
+                }
+
+            });
+
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+            if (child != null && clickListener != null && detector.onTouchEvent(e)) {
+                clickListener.onClick(child, rv.getChildAdapterPosition(child));
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        }
+    }
+
 
     // recyclerview 데이터 추가
     private void getData(){
@@ -151,45 +188,6 @@ public class PageThreeFragment extends Fragment {
 
     }
 
-
-    //클릭Listener
-    public interface ClickListener{
-        void onClick(View view, int pos);
-    }
-
-    //recyclerview touch 이벤트
-    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-        private GestureDetector detector;
-        private PageThreeFragment.ClickListener clickListener;
-
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final PageThreeFragment.ClickListener clickListener) {
-            this.clickListener = clickListener;
-            detector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
-                public boolean onSingleTapUp(MotionEvent e){
-                    return true;
-                }
-            });
-
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            View child = rv.findChildViewUnder(e.getX(), e.getY());
-            if (child != null && clickListener != null && detector.onTouchEvent(e)) {
-                clickListener.onClick(child, rv.getChildAdapterPosition(child));
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-        }
-    }
 
     //DB 연결
     private class getAllNote extends AsyncTask<String, Void, String> {
@@ -299,7 +297,7 @@ public class PageThreeFragment extends Fragment {
                     String date = item.getString(TAG_SENDDATE);
                     String content = item.getString(TAG_CONTENT);
                     String idx = item.getString(TAG_IDX);
-                    content = content.substring(0,6) + "....";
+                    content = content.substring(0,3) + "....";
 
 
                     hashMap.put(TAG_SENDNICK, send_nick);
@@ -308,12 +306,9 @@ public class PageThreeFragment extends Fragment {
                     hashMap.put(TAG_IDX, idx);
 
                     mArrayList.add(hashMap);
-
-
                 }
 
                 getData();
-
 
             } catch (JSONException e) {
 

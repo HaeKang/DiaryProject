@@ -141,11 +141,8 @@ public class SignUpActivity extends AppCompatActivity {
                         finish();
                     }
                 }
-                else if (check_id_state == false && check_nick_state == true){
-                    StyleableToast.makeText(getApplicationContext(), "아이디 중복확인 필요", Toast.LENGTH_LONG, R.style.sign).show();
-                }
                 else{
-                    StyleableToast.makeText(getApplicationContext(), "닉네임 중복확인 필요", Toast.LENGTH_LONG, R.style.sign).show();
+                    StyleableToast.makeText(getApplicationContext(), "아이디, 닉네임 중복확인 필요", Toast.LENGTH_LONG, R.style.sign).show();
                 }
             }
         });

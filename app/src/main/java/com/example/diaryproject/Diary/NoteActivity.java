@@ -9,6 +9,9 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +45,10 @@ public class NoteActivity extends AppCompatActivity {
     TextView tDate;
     TextView tContent;
 
+    ImageView sendImg;
+    Spinner note_spn;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +61,20 @@ public class NoteActivity extends AppCompatActivity {
 
         ReadNote task = new ReadNote();
         task.execute(index);
+
+        sendImg = findViewById(R.id.send_note_img);
+        note_spn = findViewById(R.id.note_spinner);
+
+
+        // note_send 이미지 클릭하면 notesend acitivity로 이동
+        sendImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendIntent = new Intent();
+
+            }
+        });
+
 
     }
 
