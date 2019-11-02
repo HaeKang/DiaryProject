@@ -29,6 +29,7 @@ public class NoteSendActivity extends AppCompatActivity {
     private String user_nick;
     private String comment_nick;
     private String writer_nick;
+    private String send_nick;
 
     private TextView title;
     private Button okbtn;
@@ -49,7 +50,7 @@ public class NoteSendActivity extends AppCompatActivity {
         user_nick = getIntent.getExtras().getString("USERNICK");
         comment_nick = getIntent.getExtras().getString("COMMENTNICK");
         writer_nick = getIntent.getExtras().getString("WRITENICK");
-
+        send_nick = getIntent.getExtras().getString("SENDNICK");
 
         title = findViewById(R.id.titleText);
         okbtn = findViewById(R.id.noteOk_btn);
@@ -60,6 +61,10 @@ public class NoteSendActivity extends AppCompatActivity {
         }
         else if(writer_nick != null){
             title.setText(writer_nick + " 님에게 쪽지를 보냅니다.");
+        } else if(send_nick != null){
+            title.setText(send_nick + "에게 쪽지를 보냅니다");
+        }else{
+            title.setText("에러발생");
         }
 
 
@@ -72,9 +77,14 @@ public class NoteSendActivity extends AppCompatActivity {
                 if(comment_nick != null) {
                     task.execute(user_nick, comment_nick, content_text);
                     Toast.makeText(getApplicationContext(), comment_nick + " 님에게 쪽지를 보냈습니다!", Toast.LENGTH_LONG).show();
-                } else{
+                } else if(writer_nick != null){
                     task.execute(user_nick, writer_nick, content_text);
                     Toast.makeText(getApplicationContext(), writer_nick + " 님에게 쪽지를 보냈습니다!", Toast.LENGTH_LONG).show();
+                } else if(send_nick != null){
+                    task.execute(user_nick, send_nick, content_text);
+                    Toast.makeText(getApplicationContext(), send_nick + " 님에게 쪽지를 보냈습니다!", Toast.LENGTH_LONG).show();
+                } else{
+                    Toast.makeText(getApplicationContext(), "에러발생", Toast.LENGTH_LONG).show();
                 }
 
                 finish();

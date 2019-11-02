@@ -373,6 +373,7 @@ public class SignUpActivity extends AppCompatActivity {
                         check_id_state = false;
                         Id.setText("");
                         Id.requestFocus();
+                        StyleableToast.makeText(getApplicationContext(), "사용불가능한 아이디입니다", Toast.LENGTH_LONG, R.style.sign).show();
                     }
 
                 } else {
@@ -386,6 +387,7 @@ public class SignUpActivity extends AppCompatActivity {
                         check_nick_state = false;
                         Nickname.setText("");
                         Nickname.requestFocus();
+                        StyleableToast.makeText(getApplicationContext(), "사용불가능한 닉네임입니다", Toast.LENGTH_LONG, R.style.sign).show();
                     }
                 }
 

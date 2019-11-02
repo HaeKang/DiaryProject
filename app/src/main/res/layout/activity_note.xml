@@ -31,9 +31,11 @@
 
             <Spinner
                 android:id="@+id/note_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" />
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@mipmap/ic_launcher_round"
+                android:entries="@array/쪽지메뉴" />
         </LinearLayout>
 
         <LinearLayout

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="쪽지메뉴">
+        <item>test</item>
+        <item>답장보내기</item>
+        <item>삭제하기</item>
+    </string-array>
+
+    <string-array name="글목록메뉴">
+        <item>전체</item>
+        <item>공개글</item>
+        <item>비공개글</item>
+    </string-array>
+
+
+</resources>

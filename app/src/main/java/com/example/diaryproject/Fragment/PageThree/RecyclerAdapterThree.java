@@ -57,7 +57,7 @@ public class RecyclerAdapterThree extends RecyclerView.Adapter<RecyclerAdapterTh
         }
 
         void onBind(NoteData data){
-            t1.setText(data.getNickname());
+            t1.setText(data.getNickname() + "님이 보냈습니다");
             t2.setText(data.getContent());
             t3.setText(data.getDate());
         }

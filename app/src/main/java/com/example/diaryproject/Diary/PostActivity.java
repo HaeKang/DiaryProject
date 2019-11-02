@@ -37,14 +37,16 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 public class PostActivity extends AppCompatActivity {
 
     String post_id;
-    String id;
+    String user_id;
 
     private String TAG = "PHPTEST";
     private static final String TAG_JSON = "post";
@@ -75,6 +77,13 @@ public class PostActivity extends AppCompatActivity {
     String writer_nickname;
     String comment_nickname;
     String comment;
+    String RealTodayDate;
+
+    String WriteDate;
+    String write_content;
+    String write_image;
+    String write_title;
+
 
     String state_post = "find";
 
@@ -88,7 +97,14 @@ public class PostActivity extends AppCompatActivity {
         Intent GetIntent = getIntent();
         post_id = GetIntent.getExtras().getString("POSTID");
         user_nickname = GetIntent.getExtras().getString("NICKNAME");
-        id = GetIntent.getExtras().getString("USERID");
+        user_id = GetIntent.getExtras().getString("USERID");
+
+
+        // 오늘 날짜
+        SimpleDateFormat fomat1 = new SimpleDateFormat( "yyyy-MM-dd");
+        Date time = new Date();
+        final String RealTodayDate = fomat1.format(time);
+
 
 
         //댓글 ui
@@ -194,16 +210,36 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(user_nickname.equals(writer_nickname)) {
-                    final CharSequence[] items = {"글 삭제하기"};
+                    final CharSequence[] items = {"글 삭제하기", "글 수정하기"};
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PostActivity.this);
                     alertDialogBuilder.setTitle("글 수정삭제");
                     alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int index) {
-                            if(index == 0){
-                                state_post  = "delete";
+                            if(index == 0) {
+                                state_post = "delete";
                                 ReadPost deletetask = new ReadPost();
                                 deletetask.execute(post_id, state_post);
+                            } else if(index == 1){
+                                // 글 수정
+                                if(RealTodayDate.equals(WriteDate)){
+
+                                    Toast.makeText(getApplicationContext(),"수정고고",Toast.LENGTH_LONG).show();
+                                    Intent WriteIntent = new Intent(getApplicationContext(), WriteActivity.class);
+                                    WriteIntent.putExtra("user_id", user_id);
+                                    WriteIntent.putExtra("user_nick",user_nickname);
+                                    WriteIntent.putExtra("content", write_content);
+                                    WriteIntent.putExtra("title", write_title);
+                                    WriteIntent.putExtra("image", write_image);
+                                    startActivity(WriteIntent);
+                                    finish();
+
+                                }else{
+
+                                    Toast.makeText(getApplicationContext(),"오늘 작성한 글만 수정 가능",Toast.LENGTH_LONG).show();
+
+                                }
+
                             }
                             dialog.dismiss();
                         }
@@ -215,7 +251,7 @@ public class PostActivity extends AppCompatActivity {
                 else{
                     final CharSequence[] items = {"쪽지보내기"};
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PostActivity.this);
-                    alertDialogBuilder.setTitle("글 수정삭제");
+                    alertDialogBuilder.setTitle("작성자에게 쪽지 보내기");
                     alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int index) {
@@ -225,6 +261,7 @@ public class PostActivity extends AppCompatActivity {
                                 intentNoteWri.putExtra("WRITENICK", writer_nickname);
                                 startActivity(intentNoteWri);
                             }
+
                             dialog.dismiss();
                         }
                     });
@@ -240,6 +277,7 @@ public class PostActivity extends AppCompatActivity {
 
     }
 
+    // 댓글 클릭 이벤트
     public interface ClickListenerComment{
         void onClick(View view, int pos);
         void onLongClick(View view, int pos);
@@ -548,7 +586,7 @@ public class PostActivity extends AppCompatActivity {
             progressDialog.dismiss();
             Toast.makeText(PostActivity.this, "댓글 삭제 완료", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(PostActivity.this, MainActivity.class);
-            intent.putExtra("user_id", id);
+            intent.putExtra("user_id", user_id);
             intent.putExtra("user_nickname",user_nickname);
             startActivity(intent);
             finish();
@@ -649,7 +687,7 @@ public class PostActivity extends AppCompatActivity {
             if (result == null || result.equals("")) {
                 Toast.makeText(PostActivity.this, "글 삭제 완료", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(PostActivity.this, MainActivity.class);
-                intent.putExtra("user_id", id);
+                intent.putExtra("user_id", user_id);
                 intent.putExtra("user_nickname",user_nickname);
                 startActivity(intent);
                 finish();
@@ -741,6 +779,12 @@ public class PostActivity extends AppCompatActivity {
                 String date = item.getString(TAG_DATE);
                 String content = item.getString(TAG_CONTENT);
                 Bitmap image = StringToBitMap(item.getString(TAG_IMAGE));
+
+                WriteDate = date;
+                write_content = content;
+                write_image = item.getString(TAG_IMAGE);
+                write_title = title;
+
 
                 writer_nickname = nickname;
 

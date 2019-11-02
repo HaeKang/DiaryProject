@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.diaryproject.Diary.NoteActivity;
 import com.example.diaryproject.Diary.PostActivity;
@@ -79,13 +80,13 @@ public class PageThreeFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_page_three, container, false);
-        final String id = getArguments().getString("user_id");
-        final String nickname = getArguments().getString("user_nick");
+        final String id = getArguments().getString("user_id");  // 현재 사용자 id
+        final String nickname = getArguments().getString("user_nick");  // 현재 사용자 nickname
 
 
         TextView tw;
         tw = v.findViewById(R.id.NoteMainText);
-        tw.setText(id + "님의 쪽지함");
+        tw.setText(nickname + "님의 쪽지함");
 
         getAllNote task = new getAllNote();
         task.execute(nickname);
@@ -106,11 +107,13 @@ public class PageThreeFragment extends Fragment {
             @Override
             public void onClick(View view, int pos) {
                 String index = mArrayList.get(pos).get(TAG_IDX);
+                String send_nick = mArrayList.get(pos).get(TAG_SENDNICK);
 
                 Intent intent = new Intent(getActivity(), NoteActivity.class);
-                intent.putExtra("INDEX", index);
-                intent.putExtra("USERID",id);
-                intent.putExtra("NICKNAME", nickname);
+                intent.putExtra("INDEX", index);    // 쪽지 index
+                intent.putExtra("USERNICK",nickname);       // 현재 사용자 NICKNAME
+                intent.putExtra("USERID", id);
+                intent.putExtra("SENDNICK", send_nick);     // 쪽지를 보낸 사용자 nickname
                 startActivity(intent);
             }
         }));
@@ -293,7 +296,7 @@ public class PageThreeFragment extends Fragment {
                     HashMap<String, String> hashMap = new HashMap<>();
                     JSONObject item = jsonArray.getJSONObject(i);
 
-                    String send_nick = item.getString(TAG_SENDNICK) + "님이 보냈습니다";
+                    String send_nick = item.getString(TAG_SENDNICK);
                     String date = item.getString(TAG_SENDDATE);
                     String content = item.getString(TAG_CONTENT);
                     String idx = item.getString(TAG_IDX);

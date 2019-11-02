@@ -63,6 +63,9 @@ public class WriteActivity extends AppCompatActivity {
     private static final int gallery = 1;
     private String temp = "";
 
+    String pre_title;
+    String pre_content;
+    String pre_img;
 
 
     @Override
@@ -72,9 +75,14 @@ public class WriteActivity extends AppCompatActivity {
 
         tedPermission(); // 권한 요청
 
+
         Intent GetIntent = getIntent();
         id = GetIntent.getExtras().getString("user_id");
         nickname = GetIntent.getExtras().getString("user_nick");
+
+        pre_title = GetIntent.getExtras().getString("title");
+        pre_content = GetIntent.getExtras().getString("content");
+        // 이미지는 안불러옴 고려중
 
 
         etitle = findViewById(R.id.title);
@@ -91,6 +99,12 @@ public class WriteActivity extends AppCompatActivity {
         });
 
 
+        if(pre_title != null){
+            etitle.setText(pre_title);
+            econtent.setText(pre_content);
+        }
+
+
         //글쓰기 버튼
         writeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,14 +117,30 @@ public class WriteActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"이미지 업로드하샘",Toast.LENGTH_LONG).show();
                 }
                 else {
-                    Write task = new Write();
-                    task.execute(getString(R.string.sever) + "/Write.php", id, nickname, title, content, temp, private_check);
+                    if(pre_title == null) {
 
-                    Intent intent = new Intent(WriteActivity.this, MainActivity.class);
-                    intent.putExtra("user_id", id);
-                    intent.putExtra("user_nickname", nickname);
-                    startActivity(intent);
-                    finish();
+                        Write task = new Write();
+                        task.execute(getString(R.string.sever) + "/Write.php", id, nickname, title, content, temp, private_check);
+
+                        Intent intent = new Intent(WriteActivity.this, MainActivity.class);
+                        intent.putExtra("user_id", id);
+                        intent.putExtra("user_nickname", nickname);
+                        startActivity(intent);
+                        finish();
+
+                    } else{
+
+                        // update문
+                        WriteUpdate task = new WriteUpdate();
+                        task.execute(getString(R.string.sever) + "/UpdatePost.php", title, content, temp, private_check);
+
+                        Intent intent = new Intent(WriteActivity.this, MainActivity.class);
+                        intent.putExtra("user_id", id);
+                        intent.putExtra("user_nickname", nickname);
+                        startActivity(intent);
+                        finish();
+
+                    }
                 }
             }
         });
@@ -144,11 +174,12 @@ public class WriteActivity extends AppCompatActivity {
             super.onPostExecute(result);
             progressDialog.dismiss();
 
-            if(result.equals("글 추가 완성")) {
-                StyleableToast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG, R.style.sign).show();
+            if(result.contains("글 추가 완성")) {
+                StyleableToast.makeText(getApplicationContext(), "글 추가 완성", Toast.LENGTH_LONG, R.style.sign).show();
             } else{
                 StyleableToast.makeText(getApplicationContext(), "글은 하루에 한번만 쓸 수 있습니다", Toast.LENGTH_LONG, R.style.sign).show();
             }
+
             Log.d(TAG, "POST response  - " + result);
         }
 
@@ -168,6 +199,101 @@ public class WriteActivity extends AppCompatActivity {
 
             String postParameters = "id=" + id + "&nickname=" + nick + "&title=" + title
                     + "&content=" + content + "&image=" + image + "&private=" + private_check;
+
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.connect();
+
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "POST response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+
+
+                bufferedReader.close();
+                return sb.toString();
+
+
+            } catch (Exception e) {
+
+                Log.d(TAG, "InsertData: Error ", e);
+                return new String("Error: " + e.getMessage());
+            }
+
+        }
+    }
+
+
+    // 글 수정 DB
+    class WriteUpdate extends AsyncTask<String, Void, String> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(WriteActivity.this,
+                    "Please Wait", null, true, true);
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+
+            if(result.contains("글 수정 완료")) {
+                StyleableToast.makeText(getApplicationContext(), "글 수정완료", Toast.LENGTH_LONG, R.style.sign).show();
+            } else{
+                StyleableToast.makeText(getApplicationContext(), "오류", Toast.LENGTH_LONG, R.style.sign).show();
+            }
+            Log.d(TAG, "POST response  - " + result);
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String serverURL = (String)params[0];
+            String title = (String)params[1];
+            String content = (String)params[2];
+            String image = (String)params[3];
+            String private_check = params[4];
+
+
+
+            String postParameters = "title=" + title + "&content=" + content + "&image=" + image + "&private=" + private_check;
 
 
             try {

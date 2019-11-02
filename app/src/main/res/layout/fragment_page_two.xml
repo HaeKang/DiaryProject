@@ -68,9 +68,17 @@
 
             </LinearLayout>
 
+            <Spinner
+                android:id="@+id/post_spinner"
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:entries="@array/글목록메뉴" />
+
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                tools:layout_editor_absoluteY="114dp">
 
                 <LinearLayout
                     android:id="@+id/Linear_my"
@@ -85,6 +93,7 @@
 
                 </LinearLayout>
             </ScrollView>
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
