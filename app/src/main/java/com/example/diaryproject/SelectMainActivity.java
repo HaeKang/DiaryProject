@@ -1,28 +1,23 @@
-package com.example.diaryproject.Fragment.PageFour;
-
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.os.Bundle;
+package com.example.diaryproject;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ImageButton;
 
-import com.example.diaryproject.Fragment.EventDecorator;
-import com.example.diaryproject.R;
+import com.example.diaryproject.Fragment.PageFour.PageFourFragment;
+import com.example.diaryproject.account.AccountMainActivity;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
@@ -34,7 +29,6 @@ import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -42,19 +36,20 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
+public class SelectMainActivity extends AppCompatActivity {
 
-public class PageFourFragment extends Fragment {
+    private String id;
+    private String nickname;
+
+    ImageButton diary;
+    ImageButton cal;
 
     Date today = new Date(System.currentTimeMillis());
 
@@ -66,34 +61,46 @@ public class PageFourFragment extends Fragment {
     private static final String TAG_DATE ="date";
     private static final String TAG_JSON="date";
 
-    public PageFourFragment() {
-        // Required empty public constructor
-    }
-
-
-    public static PageFourFragment newInstance(String p1, String p2){
-        PageFourFragment fragment = new PageFourFragment();
-        Bundle args = new Bundle();
-        args.putString("user_id", p1);
-        args.putString("user_nick",p2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_select_main);
 
-        View v = inflater.inflate(R.layout.fragment_page_four, container, false);
-        String id = getArguments().getString("user_id");    // user id
-        String nickname = getArguments().getString("user_nick");    // user nickname
+        Intent intent = getIntent();
+        id = intent.getExtras().getString("user_id");
+        nickname = intent.getExtras().getString("user_nickname");
 
-        final MaterialCalendarView materialCalendarView = v.findViewById(R.id.four_calendar);
+        diary = findViewById(R.id.Diary_btn);
+        cal = findViewById(R.id.Cal_btn);
+
+
+        diary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SelectMainActivity.this, MainActivity.class);
+                intent.putExtra("user_id", id);
+                intent.putExtra("user_nickname", nickname);
+                startActivity(intent);
+            }
+        });
+
+        cal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SelectMainActivity.this, AccountMainActivity.class);
+                intent.putExtra("user_id", id);
+                intent.putExtra("user_nickname", nickname);
+                startActivity(intent);
+            }
+        });
+
+
+        // 캘린더
+        final MaterialCalendarView materialCalendarView = findViewById(R.id.select_cal);
 
         getPostDate task = new getPostDate();
         task.execute(id);
-
 
         materialCalendarView.state().edit()
                 .setFirstDayOfWeek(Calendar.SUNDAY)
@@ -129,14 +136,13 @@ public class PageFourFragment extends Fragment {
         }, 1500);
 
 
-        return v;
+
+
     }
 
 
-
-
     // 일요일 빨간색상
-    public class SundayDecorator implements DayViewDecorator{
+    public class SundayDecorator implements DayViewDecorator {
 
         private final Calendar calendar = Calendar.getInstance();
 
@@ -220,7 +226,7 @@ public class PageFourFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = ProgressDialog.show(getActivity(),
+            progressDialog = ProgressDialog.show(SelectMainActivity.this,
                     "글을 불러옵니다", null, true, true);
         }
 

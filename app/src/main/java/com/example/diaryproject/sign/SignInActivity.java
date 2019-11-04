@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.diaryproject.MainActivity;
 import com.example.diaryproject.R;
+import com.example.diaryproject.SelectMainActivity;
 import com.muddzdev.styleabletoast.StyleableToast;
 
 import org.json.JSONArray;
@@ -42,10 +43,12 @@ public class SignInActivity extends AppCompatActivity {
     private String TAG = "PHPTEST";
     private static final String TAG_JSON="webnautes";
     private static final String TAG_ID = "id";
-    private static final String TAG_PW = "pw";
     private static final String TAG_NICKNAME ="nickname";
     String mJsonString;
 
+
+    private SharedPreferences loginInfo;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +63,7 @@ public class SignInActivity extends AppCompatActivity {
 
         autologin = findViewById(R.id.autologin);
 
-        final SharedPreferences loginInfo = getSharedPreferences("setting",0);
-        final SharedPreferences.Editor editor = loginInfo.edit();
-
+        loginInfo = getSharedPreferences("setting",0);
         String auto_loginid = loginInfo.getString("id",null);
 
 
@@ -75,13 +76,6 @@ public class SignInActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Login task = new Login();
                     task.execute(id.getText().toString(), pw.getText().toString());
-
-                    // 자동로그인
-                    if(autologin.isChecked()){
-                        editor.putString("id", id.getText().toString());
-                        editor.putString("password",pw.getText().toString());
-                        editor.commit();
-                    }
                 }
             });
 
@@ -95,9 +89,9 @@ public class SignInActivity extends AppCompatActivity {
         }
 
         else{
-            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+            Intent intent = new Intent(SignInActivity.this, SelectMainActivity.class);
             intent.putExtra("user_id", loginInfo.getString("id",""));
-            intent.putExtra("user_nickname",loginInfo.getString("password",""));
+            intent.putExtra("user_nickname", loginInfo.getString("nickname",""));
             StyleableToast.makeText(getApplicationContext(), "자동로그인 했습니다", Toast.LENGTH_LONG, R.style.sign).show();
             startActivity(intent);
             finish();
@@ -106,6 +100,11 @@ public class SignInActivity extends AppCompatActivity {
     }
 
 
+    private void autoLogin(SharedPreferences.Editor editor, String id, String nickname){
+        editor.putString("id", id);
+        editor.putString("nickname", nickname);
+        editor.commit();
+    }
 
     // 로그인DB
     private class Login extends AsyncTask<String, Void, String> {
@@ -214,14 +213,18 @@ public class SignInActivity extends AppCompatActivity {
                 JSONObject item = jsonArray.getJSONObject(0);
 
                 final String id = item.getString(TAG_ID);
-                String pw = item.getString(TAG_PW);
                 final String nickname = item.getString(TAG_NICKNAME);
 
 
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SelectMainActivity.class);
                 intent.putExtra("user_id", id);
                 intent.putExtra("user_nickname",nickname);
 
+                // 자동로그인
+                if(autologin.isChecked()){
+                    SharedPreferences.Editor editor = loginInfo.edit();
+                    autoLogin(editor,id, nickname);
+                }
 
                 StyleableToast.makeText(getApplicationContext(), "반갑습니다 " + nickname + " 님!", Toast.LENGTH_LONG, R.style.sign).show();
                 startActivity(intent);

@@ -133,17 +133,15 @@ public class SignUpActivity extends AppCompatActivity {
                     Pw.setText("");
                     Nickname.setText("");
 
-
-                    if (!id.equals("") && !pw.equals("") && !nickname.equals("") && state_db.equals("ok")) {
-                        Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
-                        StyleableToast.makeText(getApplicationContext(), "회원가입이 완료되었습니다.", Toast.LENGTH_LONG, R.style.sign).show();
-                        startActivity(intent);
-                        finish();
-                    }
-                }
-                else{
+                    Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+                    StyleableToast.makeText(getApplicationContext(), "회원가입이 완료되었습니다.", Toast.LENGTH_LONG, R.style.sign).show();
+                    startActivity(intent);
+                    finish();
+                    } else{
                     StyleableToast.makeText(getApplicationContext(), "아이디, 닉네임 중복확인 필요", Toast.LENGTH_LONG, R.style.sign).show();
                 }
+
+
             }
         });
     }

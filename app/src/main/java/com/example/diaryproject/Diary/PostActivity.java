@@ -86,9 +86,7 @@ public class PostActivity extends AppCompatActivity {
     String write_weather;
     String write_title;
 
-
     String state_post = "find";
-
 
 
     @Override

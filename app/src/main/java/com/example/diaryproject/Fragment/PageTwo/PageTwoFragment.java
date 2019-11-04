@@ -102,6 +102,7 @@ public class PageTwoFragment extends Fragment {
         nick_tv.setText(user_nick);
 
 
+
         //글쓰기 버튼 클릭
         write.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View view){
