@@ -43,6 +43,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.example.diaryproject.R.drawable.sun_check;
+
 public class PostActivity extends AppCompatActivity {
 
     String post_id;
@@ -56,7 +58,7 @@ public class PostActivity extends AppCompatActivity {
     private static final String TAG_TITLE = "title";
     private static final String TAG_CONTENT = "content";
     private static final String TAG_COMMENT = "comment";
-    private static final String TAG_IMAGE = "image";
+    private static final String TAG_WEATHER = "weather";
 
     private ComRecyclerAdapter mAdapter;
     ArrayList<HashMap<String,String>> mArrayList = new ArrayList<>();
@@ -66,7 +68,7 @@ public class PostActivity extends AppCompatActivity {
     TextView tContent;
     TextView tNickname;
     TextView tDate;
-    ImageView tImage;
+    ImageView wImage;
     ImageView pImage;
     EditText tComment;
     Button btn;
@@ -81,7 +83,7 @@ public class PostActivity extends AppCompatActivity {
 
     String WriteDate;
     String write_content;
-    String write_image;
+    String write_weather;
     String write_title;
 
 
@@ -230,7 +232,7 @@ public class PostActivity extends AppCompatActivity {
                                     WriteIntent.putExtra("user_nick",user_nickname);
                                     WriteIntent.putExtra("content", write_content);
                                     WriteIntent.putExtra("title", write_title);
-                                    WriteIntent.putExtra("image", write_image);
+                                    WriteIntent.putExtra("weather", write_weather);
                                     startActivity(WriteIntent);
                                     finish();
 
@@ -778,11 +780,11 @@ public class PostActivity extends AppCompatActivity {
                 String title = item.getString(TAG_TITLE);
                 String date = item.getString(TAG_DATE);
                 String content = item.getString(TAG_CONTENT);
-                Bitmap image = StringToBitMap(item.getString(TAG_IMAGE));
+                String weather = item.getString(TAG_WEATHER);
 
                 WriteDate = date;
                 write_content = content;
-                write_image = item.getString(TAG_IMAGE);
+                write_weather = weather;
                 write_title = title;
 
 
@@ -792,17 +794,29 @@ public class PostActivity extends AppCompatActivity {
                 tTitle = findViewById(R.id.title_text);
                 tDate = findViewById(R.id.date_text);
                 tContent = findViewById(R.id.content_text);
-                tImage = findViewById(R.id.content_image);
+                wImage = findViewById(R.id.weather_img);
 
                 tNickname.setText("작성자 : " + nickname);
                 tTitle.setText(title);
                 tDate.setText(date);
                 tContent.setText(content);
 
-                if(image != null) {
-                    tImage.setImageBitmap(image);
-                } else{
-                    tImage.setImageResource(R.drawable.signup);
+                switch (weather){
+                    case "맑음":
+                        wImage.setImageResource(R.drawable.sun_check);
+                        break;
+                    case "해구름" :
+                        wImage.setImageResource(R.drawable.suncloud_check);
+                        break;
+                    case "구름":
+                        wImage.setImageResource(R.drawable.cloud_check);
+                        break;
+                    case "비":
+                        wImage.setImageResource(R.drawable.rain_check);
+                        break;
+                    case "눈":
+                        wImage.setImageResource(R.drawable.snow_check);
+                        break;
                 }
 
             } catch (JSONException e) {
@@ -810,19 +824,6 @@ public class PostActivity extends AppCompatActivity {
                 Log.d(TAG, "showResult : ", e);
             }
 
-        }
-
-        public Bitmap StringToBitMap(String image){
-            Log.e("StringToBitMap","StringToBitMap");
-            try{
-                byte [] encodeByte=image.getBytes();
-                Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-                return bitmap;
-
-            }catch(Exception e){
-                e.getMessage();
-                return null;
-            }
         }
 
     }
