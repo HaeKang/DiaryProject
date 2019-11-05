@@ -12,11 +12,17 @@
 
         <TextView
             android:id="@+id/send_id"
-            android:layout_width="302dp"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:text="보낸이" />
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/recv_date"

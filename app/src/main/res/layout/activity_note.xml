@@ -31,16 +31,17 @@
 
             <Spinner
                 android:id="@+id/note_spinner"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@mipmap/ic_launcher_round"
+                android:background="@android:drawable/ic_menu_edit"
                 android:entries="@array/쪽지메뉴" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:orientation="horizontal"
             android:paddingTop="5dp"
             tools:layout_editor_absoluteX="8dp"
@@ -67,6 +68,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:orientation="vertical"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="35dp">

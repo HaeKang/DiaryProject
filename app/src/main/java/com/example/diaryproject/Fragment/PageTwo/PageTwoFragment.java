@@ -25,7 +25,7 @@ import com.example.diaryproject.Diary.PostActivity;
 import com.example.diaryproject.Diary.WriteActivity;
 import com.example.diaryproject.Fragment.Data;
 import com.example.diaryproject.Fragment.PageOne.PageOneFragment;
-import com.example.diaryproject.MainActivity;
+import com.example.diaryproject.Diary.MainActivity;
 import com.example.diaryproject.R;
 import com.example.diaryproject.sign.SignInActivity;
 
@@ -87,19 +87,17 @@ public class PageTwoFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         final View v = inflater.inflate(R.layout.fragment_page_two, container, false);
-        id_tv = v.findViewById(R.id.id_textview);
         nick_tv = v.findViewById(R.id.nick_textview);
         write = v.findViewById(R.id.write);
         logout = v.findViewById(R.id.logout_btn);
 
         post_spn = v.findViewById(R.id.post_spinner);
-
+        post_spn.setSelection(0);
 
         final String user_id = getArguments().getString("user_id");
         final String user_nick= getArguments().getString("user_nick");
 
-        id_tv.setText(user_id);
-        nick_tv.setText(user_nick);
+        nick_tv.setText(user_nick + "님이 작성한 이야기 목록입니다.");
 
 
 
@@ -132,6 +130,8 @@ public class PageTwoFragment extends Fragment {
 
 
         // spinner
+
+
         post_spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -178,6 +178,7 @@ public class PageTwoFragment extends Fragment {
 
 
         for (int i = 0; i < listTitle.size(); i++) {
+            Log.d("test",i + "번째 데이터 추가 중");
             Data data = new Data();
             data.setTitle(listTitle.get(i));
             data.setNickname(listNick.get(i));
@@ -354,6 +355,7 @@ public class PageTwoFragment extends Fragment {
     }
 
     private void ShowOpen(final String id, final String nickname, View v){
+        Log.d("test","ShowOpen실행");
         getMyPost task2 = new getMyPost();
         task2.execute(id,"0");
 
@@ -407,4 +409,9 @@ public class PageTwoFragment extends Fragment {
         }));
     }
 
+    public void clear(){
+        int size = mArrayList.size();
+        mArrayList.clear();
+        mAdapter.notifyItemRangeRemoved(0,size);
+    }
 }

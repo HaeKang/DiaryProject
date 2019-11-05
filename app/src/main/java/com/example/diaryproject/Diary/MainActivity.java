@@ -1,4 +1,4 @@
-package com.example.diaryproject;
+package com.example.diaryproject.Diary;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.diaryproject.Fragment.FragmentAdapter;
+import com.example.diaryproject.R;
 import com.google.android.material.tabs.TabLayout;
 import com.muddzdev.styleabletoast.StyleableToast;
 
@@ -34,7 +35,6 @@ public class MainActivity extends FragmentActivity {
         Intent intent = getIntent();
         id = intent.getExtras().getString("user_id");
         nickname = intent.getExtras().getString("user_nickname");
-
 
 
         // 레이아웃 설정하기

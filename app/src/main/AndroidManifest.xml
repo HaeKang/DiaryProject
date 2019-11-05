@@ -14,9 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".account.AddAccount"></activity>
+        <activity android:name=".account.ChartActivity" />
+        <activity android:name=".account.CalenderActivity" />
         <activity
             android:name=".account.AccountMainActivity"
-            android:label="@string/title_activity_account_main"></activity>
+            android:label="@string/title_activity_account_main" />
         <activity android:name=".SelectMainActivity" />
         <activity android:name=".Diary.DrawWriteActivity" />
         <activity android:name=".Diary.NoteActivity" />
@@ -24,7 +27,7 @@
         <activity android:name=".Diary.PostActivity" />
         <activity android:name=".Diary.WriteActivity" />
         <activity android:name=".sign.SignUpActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".Diary.MainActivity" />
         <activity android:name=".sign.SignInActivity" />
         <activity android:name=".StartActivity">
             <intent-filter>

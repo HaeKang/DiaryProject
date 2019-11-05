@@ -300,8 +300,11 @@ public class PageThreeFragment extends Fragment {
                     String date = item.getString(TAG_SENDDATE);
                     String content = item.getString(TAG_CONTENT);
                     String idx = item.getString(TAG_IDX);
-                    content = content.substring(0,3) + "....";
 
+                    int content_length = content.length();
+                    if(content_length > 10){
+                        content = content.substring(0,10) + "....";
+                    }
 
                     hashMap.put(TAG_SENDNICK, send_nick);
                     hashMap.put(TAG_SENDDATE, date);

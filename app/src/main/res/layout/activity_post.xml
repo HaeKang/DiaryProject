@@ -30,6 +30,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -55,6 +57,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:orientation="vertical">
 
                 <ImageView
@@ -68,6 +72,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/stroke_down"
                 android:orientation="horizontal">
 
@@ -94,6 +100,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/stroke_down"
                 android:orientation="vertical">
 
@@ -108,17 +116,18 @@
                     android:id="@+id/content_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
                     android:text="content"
                     tools:layout_editor_absoluteX="65dp"
-                    tools:layout_editor_absoluteY="193dp"
-                    android:layout_margin="20dp"
-                    />
+                    tools:layout_editor_absoluteY="193dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="320dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="8dp"
                 android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -134,7 +143,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:layout_marginBottom="8dp"
+        android:layout_margin="8dp"
         android:background="@android:color/background_light"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"

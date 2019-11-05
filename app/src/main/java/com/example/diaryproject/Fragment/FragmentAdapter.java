@@ -46,13 +46,13 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position){
         switch (position){
             case 0:
-                return "첫번째 탭";
+                return "모든이야기";
             case 1:
-                return "두번째";
+                return "나의이야기";
             case 2:
-                return "세번째";
+                return "쪽지함";
             case 3:
-                return "네번째";
+                return "기록달력";
             default:
                     return null;
         }

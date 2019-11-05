@@ -60,5 +60,7 @@ public class RecyclerAdapterTwo extends RecyclerView.Adapter<RecyclerAdapterTwo.
             t3.setText(data.getDate());
         }
 
+
+
     }
 }

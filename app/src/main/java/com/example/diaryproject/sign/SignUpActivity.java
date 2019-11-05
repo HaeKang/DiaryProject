@@ -2,7 +2,6 @@ package com.example.diaryproject.sign;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -14,7 +13,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.diaryproject.MainActivity;
 import com.example.diaryproject.R;
 import com.muddzdev.styleabletoast.StyleableToast;
 

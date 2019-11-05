@@ -5,19 +5,26 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.LineBackgroundSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
-import com.example.diaryproject.Fragment.PageFour.PageFourFragment;
+import com.example.diaryproject.Diary.MainActivity;
 import com.example.diaryproject.account.AccountMainActivity;
+import com.example.diaryproject.sign.SignInActivity;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
@@ -50,6 +57,7 @@ public class SelectMainActivity extends AppCompatActivity {
 
     ImageButton diary;
     ImageButton cal;
+    Button logout;
 
     Date today = new Date(System.currentTimeMillis());
 
@@ -73,6 +81,7 @@ public class SelectMainActivity extends AppCompatActivity {
 
         diary = findViewById(R.id.Diary_btn);
         cal = findViewById(R.id.Cal_btn);
+        logout = findViewById(R.id.main_logout_btn);
 
 
         diary.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +101,22 @@ public class SelectMainActivity extends AppCompatActivity {
                 intent.putExtra("user_id", id);
                 intent.putExtra("user_nickname", nickname);
                 startActivity(intent);
+            }
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences loginInfo = getSharedPreferences("setting",0);
+                SharedPreferences.Editor editor = loginInfo.edit();
+                editor.clear();
+                editor.commit();
+
+                Intent intent = new Intent(SelectMainActivity.this, SignInActivity.class);
+                startActivity(intent);
+                finish();
+
+                Toast.makeText(SelectMainActivity.this,"로그아웃 했습니다.",Toast.LENGTH_LONG).show();
             }
         });
 
@@ -133,12 +158,10 @@ public class SelectMainActivity extends AppCompatActivity {
                 );
 
             }
-        }, 1500);
-
-
-
+        }, 1200);
 
     }
+
 
 
     // 일요일 빨간색상
@@ -214,6 +237,8 @@ public class SelectMainActivity extends AppCompatActivity {
             view.addSpan(new DotSpan(10, Color.BLACK));
         }
     }
+
+
 
 
     // 글 목록이 있는 date들 불러오기
@@ -340,4 +365,6 @@ public class SelectMainActivity extends AppCompatActivity {
 
         }
     }
+
+
 }

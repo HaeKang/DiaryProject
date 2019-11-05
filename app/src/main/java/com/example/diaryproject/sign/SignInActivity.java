@@ -1,12 +1,10 @@
 package com.example.diaryproject.sign;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,7 +12,6 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.diaryproject.MainActivity;
 import com.example.diaryproject.R;
 import com.example.diaryproject.SelectMainActivity;
 import com.muddzdev.styleabletoast.StyleableToast;
@@ -92,18 +89,11 @@ public class SignInActivity extends AppCompatActivity {
             Intent intent = new Intent(SignInActivity.this, SelectMainActivity.class);
             intent.putExtra("user_id", loginInfo.getString("id",""));
             intent.putExtra("user_nickname", loginInfo.getString("nickname",""));
-            StyleableToast.makeText(getApplicationContext(), "자동로그인 했습니다", Toast.LENGTH_LONG, R.style.sign).show();
+            StyleableToast.makeText(getApplicationContext(), "자동로그인 했습니다" , Toast.LENGTH_LONG, R.style.sign).show();
             startActivity(intent);
             finish();
         }
 
-    }
-
-
-    private void autoLogin(SharedPreferences.Editor editor, String id, String nickname){
-        editor.putString("id", id);
-        editor.putString("nickname", nickname);
-        editor.commit();
     }
 
     // 로그인DB
@@ -223,7 +213,9 @@ public class SignInActivity extends AppCompatActivity {
                 // 자동로그인
                 if(autologin.isChecked()){
                     SharedPreferences.Editor editor = loginInfo.edit();
-                    autoLogin(editor,id, nickname);
+                    editor.putString("id", id);
+                    editor.putString("nickname", nickname);
+                    editor.commit();
                 }
 
                 StyleableToast.makeText(getApplicationContext(), "반갑습니다 " + nickname + " 님!", Toast.LENGTH_LONG, R.style.sign).show();
