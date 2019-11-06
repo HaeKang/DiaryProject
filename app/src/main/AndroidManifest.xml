@@ -21,7 +21,6 @@
             android:name=".account.AccountMainActivity"
             android:label="@string/title_activity_account_main" />
         <activity android:name=".SelectMainActivity" />
-        <activity android:name=".Diary.DrawWriteActivity" />
         <activity android:name=".Diary.NoteActivity" />
         <activity android:name=".Diary.NoteSendActivity" />
         <activity android:name=".Diary.PostActivity" />

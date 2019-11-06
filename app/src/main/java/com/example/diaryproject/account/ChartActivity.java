@@ -61,10 +61,6 @@ public class ChartActivity extends AppCompatActivity {
         ValueSum task = new ValueSum();
         task.execute(user_id, date);
 
-        TextView tv;
-        tv = findViewById(R.id.textView);
-        tv.setText("food : " + sum_food);
-
     }
 
 

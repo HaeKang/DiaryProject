@@ -13,9 +13,12 @@
     </string-array>
 
     <string-array name="context_spinner">
-        <item>음식</item>
         <item>입금</item>
+        <item>용돈</item>
         <item>도서</item>
+        <item>의류</item>
+        <item>음식</item>
+        <item>교통</item>
         <item>기타</item>
     </string-array>
 

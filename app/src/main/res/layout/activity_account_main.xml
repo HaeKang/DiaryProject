@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="오늘의차트" />
+                android:text="오늘의 지출 차트" />
 
         </LinearLayout>
 
