@@ -42,9 +42,6 @@ public class WriteActivity extends AppCompatActivity {
     private String TAG = "PHPTEST";
 
 
-    private static final int gallery = 1;
-    private String temp = "";
-
     String pre_title;
     String pre_content;
     String weather;

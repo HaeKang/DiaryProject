@@ -14,7 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".account.AddAccount"></activity>
+        <activity android:name=".Plan.PlanDeleteActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/popupTheme">
+        </activity>
+        <activity
+            android:name=".Plan.PlanAddActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/popupTheme" />
+        <activity
+            android:name=".Plan.PlanActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/popupTheme" />
+        <activity android:name=".account.AddAccount" />
         <activity android:name=".account.ChartActivity" />
         <activity android:name=".account.CalenderActivity" />
         <activity

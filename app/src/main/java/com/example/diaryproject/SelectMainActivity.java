@@ -3,28 +3,27 @@ package com.example.diaryproject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.LineBackgroundSpan;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.diaryproject.Diary.MainActivity;
+import com.example.diaryproject.Plan.PlanActivity;
 import com.example.diaryproject.account.AccountMainActivity;
 import com.example.diaryproject.sign.SignInActivity;
+import com.muddzdev.styleabletoast.StyleableToast;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
@@ -48,32 +47,46 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 
 public class SelectMainActivity extends AppCompatActivity {
 
     private String id;
     private String nickname;
+    private String select_date;
 
     ImageButton diary;
     ImageButton cal;
     Button logout;
+    TextView plantext;
 
-    Date today = new Date(System.currentTimeMillis());
 
-    ArrayList<String> mArrayList = new ArrayList<>();
+    ArrayList<HashMap<String,String>> testArray = new ArrayList<>();
+
+    ArrayList<String> listDate = new ArrayList<>();
+    ArrayList<String> listContent = new ArrayList<>();
+    ArrayList<String> listIndex = new ArrayList<>();
+
     HashSet<CalendarDay> dayArrayList = new HashSet<>();
 
     String mJsonString;
     private String TAG = "PHPTEST";
+    private static final String TAG_JSON="plan";
     private static final String TAG_DATE ="date";
-    private static final String TAG_JSON="date";
+    private static final String TAG_CONTENT="content";
+    private static final String TAG_INDEX="idx";
 
+    public static Activity Select_Main_Activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_main);
+
+        Select_Main_Activity = SelectMainActivity.this;
+
 
         Intent intent = getIntent();
         id = intent.getExtras().getString("user_id");
@@ -84,6 +97,7 @@ public class SelectMainActivity extends AppCompatActivity {
         logout = findViewById(R.id.main_logout_btn);
 
 
+
         diary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,6 +105,7 @@ public class SelectMainActivity extends AppCompatActivity {
                 intent.putExtra("user_id", id);
                 intent.putExtra("user_nickname", nickname);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -101,6 +116,7 @@ public class SelectMainActivity extends AppCompatActivity {
                 intent.putExtra("user_id", id);
                 intent.putExtra("user_nickname", nickname);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -122,9 +138,10 @@ public class SelectMainActivity extends AppCompatActivity {
 
 
         // 캘린더
+
         final MaterialCalendarView materialCalendarView = findViewById(R.id.select_cal);
 
-        getPostDate task = new getPostDate();
+        getPlanDate task = new getPlanDate();
         task.execute(id);
 
         materialCalendarView.state().edit()
@@ -146,9 +163,40 @@ public class SelectMainActivity extends AppCompatActivity {
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                CalendarDay today = CalendarDay.today(); // 오늘날짜
+                int year = date.getYear();
+                int month = date.getMonth() + 1;
+                int day = date.getDay();
+
+                String select_date = year + "-" + month + "-" + day;
+
+                // 일정 있을 때
+                if(listDate.contains(select_date)){
+                    ArrayList<String> content = getContent(testArray,select_date);
+                    ArrayList<String> idx = getIdx(testArray, select_date);
+
+                    Intent intent = new Intent(SelectMainActivity.this, PlanActivity.class);
+                    intent.putExtra("date", select_date);
+                    intent.putExtra("user_id", id);
+                    intent.putExtra("user_nickname", nickname);
+                    intent.putExtra("content", content);    // 그 날에 해당하는 content들 전달
+                    intent.putExtra("idx", idx);
+                    startActivity(intent);
+
+                } else{
+                    // 일정 없을 때
+                    Intent intent = new Intent(SelectMainActivity.this, PlanActivity.class);
+                    intent.putExtra("date", select_date);
+                    intent.putExtra("user_id", id);
+                    intent.putExtra("user_nickname", nickname);
+                    startActivity(intent);
+                }
+
+
+
+
             }
         });
+
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -158,10 +206,41 @@ public class SelectMainActivity extends AppCompatActivity {
                 );
 
             }
-        }, 1200);
+        }, 1000);
 
     }
 
+
+   private ArrayList<String> getContent(ArrayList<HashMap<String,String>> testArray, String date){
+       ArrayList<String> listContent = new ArrayList<>();
+       for(int i=0; i<testArray.size(); i++){
+           if(date.equals(testArray.get(i).get("date"))){
+               listContent.add(testArray.get(i).get("content"));
+           }
+       }
+
+        return listContent;
+   }
+
+    private ArrayList<String> getIdx(ArrayList<HashMap<String,String>> testArray, String date){
+        ArrayList<String> listIndex = new ArrayList<>();
+        for(int i=0; i<testArray.size(); i++){
+            if(date.equals(testArray.get(i).get("date"))){
+                listIndex.add(testArray.get(i).get("index"));
+            }
+        }
+
+        return listIndex;
+    }
+
+
+    // 오늘 날짜
+    static public String getToday_date(){
+        SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("yyyy-MM-d", Locale.KOREA);
+        Date currentTime = new Date();
+        String Today_day = mSimpleDateFormat.format(currentTime);
+        return Today_day;
+    }
 
 
     // 일요일 빨간색상
@@ -200,25 +279,6 @@ public class SelectMainActivity extends AppCompatActivity {
         }
     }
 
-    // 오늘날짜 노랑색
-    public class TodayDecorator implements DayViewDecorator{
-
-        private final Calendar calendar = Calendar.getInstance();
-        CalendarDay today = CalendarDay.today();
-
-        @Override
-        public boolean shouldDecorate(CalendarDay day) {
-            day.copyTo(calendar);
-            return today != null && day.equals(today);
-        }
-
-        @Override
-        public void decorate(DayViewFacade view) {
-            view.addSpan(new StyleSpan(Typeface.BOLD));
-            view.addSpan(new DotSpan(10, Color.BLACK));
-        }
-    }
-
 
     // 글 쓴 날에 점찍기 deco
     public class EventDecorator implements DayViewDecorator {
@@ -240,9 +300,8 @@ public class SelectMainActivity extends AppCompatActivity {
 
 
 
-
     // 글 목록이 있는 date들 불러오기
-    private class getPostDate extends AsyncTask<String, Void, String> {
+    private class getPlanDate extends AsyncTask<String, Void, String> {
 
         ProgressDialog progressDialog;
         String errorString = null;
@@ -262,10 +321,9 @@ public class SelectMainActivity extends AppCompatActivity {
             progressDialog.dismiss();
 
 
-            if(result.equals("글이 없오") || result == null){
+            if (result.equals("글이 없오") || result == null) {
 
-            }
-            else {
+            } else {
                 mJsonString = result;
                 showResult();
             }
@@ -275,10 +333,10 @@ public class SelectMainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
 
-            String id = (String)params[0];
+            String id = (String) params[0];
             String postParameters = "id=" + id;
 
-            String serverURL = getString(R.string.sever) + "/FindPostDate.php";
+            String serverURL = getString(R.string.sever) + "/FindPlan.php";
 
             try {
 
@@ -302,10 +360,9 @@ public class SelectMainActivity extends AppCompatActivity {
                 Log.d(TAG, "POST response code - " + responseStatusCode);
 
                 InputStream inputStream;
-                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
                     inputStream = httpURLConnection.getInputStream();
-                }
-                else{
+                } else {
                     inputStream = httpURLConnection.getErrorStream();
                 }
 
@@ -316,7 +373,7 @@ public class SelectMainActivity extends AppCompatActivity {
                 StringBuilder sb = new StringBuilder();
                 String line = null;
 
-                while((line = bufferedReader.readLine()) != null){
+                while ((line = bufferedReader.readLine()) != null) {
                     sb.append(line);
                 }
 
@@ -337,22 +394,55 @@ public class SelectMainActivity extends AppCompatActivity {
 
         }
 
-        private void showResult(){
+        private void showResult() {
             try {
                 JSONObject jsonObject = new JSONObject(mJsonString);
                 JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
-                mArrayList.clear();
+                testArray.clear();  // 총 array
+                dayArrayList.clear();   // 날짜 deco위한 hashmap
+                listDate.clear();
+                listContent.clear();
+                listIndex.clear();
 
-                for(int i=0; i<jsonArray.length(); i++){
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                    HashMap<String,String> mHashmap = new HashMap<>();
+                    mHashmap.clear();
+
                     JSONObject item = jsonArray.getJSONObject(i);
-
                     String date = item.getString(TAG_DATE);
-                    SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    String content = item.getString(TAG_CONTENT);
+                    String index = item.getString(TAG_INDEX);
+
+                    mHashmap.put("date", date);
+                    mHashmap.put("content", content);
+                    mHashmap.put("index", index);
+
+                    listDate.add(date);
+                    listContent.add(content);
+                    listIndex.add(index);
+
+                    testArray.add(mHashmap);
+
+                    SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-d");
                     Date realdate = transFormat.parse(date);
                     dayArrayList.add(CalendarDay.from(realdate));
 
                 }
 
+                Log.d("test",testArray.toString());
+
+                // 만약 오늘 일정이 있으면
+                String content = "";
+
+                for (int i = 0; i < testArray.size(); i++) {
+                    if(testArray.get(i).get("date").equals(getToday_date())){
+                        content += testArray.get(i).get("content") + "\n";
+                    }
+                }
+
+                plantext = findViewById(R.id.planshow_text);
+                plantext.setText("오늘" + id + "님의 일정 \n" + content);
 
 
             } catch (JSONException e) {
@@ -366,5 +456,23 @@ public class SelectMainActivity extends AppCompatActivity {
         }
     }
 
+    //뒤로버튼 event
+    private long time = 0;
+    public void onBackPressed(){
+        if(System.currentTimeMillis()-time >= 2000){
+            time = System.currentTimeMillis();
+            StyleableToast.makeText(getApplicationContext(), "뒤로가기 버튼을 한번 더 누르면 종료합니다.", Toast.LENGTH_LONG,R.style.backtoast).show();
+        } else if(System.currentTimeMillis()-time < 2000){
+            Intent intent = new Intent(SelectMainActivity.this , SelectMainActivity.class);
+            intent.putExtra("user_id", id);
+            intent.putExtra("user_nickname", nickname);
+            startActivity(intent);
+            finish();
+        }
+    }
 
 }
+
+
+
+

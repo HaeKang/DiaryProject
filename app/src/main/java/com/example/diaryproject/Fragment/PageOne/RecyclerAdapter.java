@@ -18,7 +18,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
   private ArrayList<Data> listData = new ArrayList<>();
 
 
-
     @NonNull
     @Override
     public RecyclerAdapter.ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

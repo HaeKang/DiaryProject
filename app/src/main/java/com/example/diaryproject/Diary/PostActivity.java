@@ -785,7 +785,7 @@ public class PostActivity extends AppCompatActivity {
 
                 tNickname = findViewById(R.id.user_text);
                 tTitle = findViewById(R.id.title_text);
-                tDate = findViewById(R.id.date_text);
+                tDate = findViewById(R.id.delete_text);
                 tContent = findViewById(R.id.content_text);
                 wImage = findViewById(R.id.weather_img);
 

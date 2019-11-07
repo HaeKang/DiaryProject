@@ -33,5 +33,12 @@
         <item name="stRadius">5dp</item>
     </style>
 
+    <style name="popupTheme" parent="Theme.AppCompat.DayNight.Dialog">
+        <item name="colorPrimary">#ff9a9e</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
 
+    </style>
 </resources>
