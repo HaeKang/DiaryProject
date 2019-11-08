@@ -49,6 +49,7 @@ public class PostActivity extends AppCompatActivity {
     private static final String TAG_JSON = "post";
     private static final String TAG_JSON2 = "compost";
     private static final String TAG_NICKNAME = "nickname";
+    private static final String TAG_ID = "id";
     private static final String TAG_DATE = "date";
     private static final String TAG_TITLE = "title";
     private static final String TAG_CONTENT = "content";
@@ -72,7 +73,9 @@ public class PostActivity extends AppCompatActivity {
 
     String user_nickname;
     String writer_nickname;
+    String write_id;
     String comment_nickname;
+    String comment_id;
     String comment;
     String RealTodayDate;
 
@@ -122,6 +125,7 @@ public class PostActivity extends AppCompatActivity {
 
             public void onLongClick(View view, int pos){
                 comment_nickname = mArrayList.get(pos).get(TAG_NICKNAME);
+                comment_id = mArrayList.get(pos).get(TAG_ID);
                 final String comment_delete = mArrayList.get(pos).get(TAG_COMMENT);
 
                 if(user_nickname.equals(comment_nickname)) {
@@ -152,8 +156,8 @@ public class PostActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int index) {
                             if(index == 0){
                                 Intent intentNoteCom = new Intent(getApplicationContext(), NoteSendActivity.class);
-                                intentNoteCom.putExtra("USERNICK", user_nickname);
-                                intentNoteCom.putExtra("COMMENTNICK", comment_nickname);
+                                intentNoteCom.putExtra("USERID", user_id);
+                                intentNoteCom.putExtra("COMMENTID", comment_id);
                                 startActivity(intentNoteCom);
                             }
                             dialog.dismiss();
@@ -186,7 +190,7 @@ public class PostActivity extends AppCompatActivity {
                 comment = tComment.getText().toString();
 
                 InsertComment taskcomment = new InsertComment();
-                taskcomment.execute(user_nickname,post_id,comment);
+                taskcomment.execute(user_nickname,post_id,comment, user_id);
 
                 mAdapter.resetItem();
 
@@ -253,7 +257,7 @@ public class PostActivity extends AppCompatActivity {
                             if(index == 0){
                                 Intent intentNoteWri = new Intent(getApplicationContext(), NoteSendActivity.class);
                                 intentNoteWri.putExtra("USERNICK", user_nickname);
-                                intentNoteWri.putExtra("WRITENICK", writer_nickname);
+                                intentNoteWri.putExtra("WRITEID", write_id);
                                 startActivity(intentNoteWri);
                             }
 
@@ -449,9 +453,11 @@ public class PostActivity extends AppCompatActivity {
 
                     String nickname = item.getString(TAG_NICKNAME);
                     String comment = item.getString(TAG_COMMENT);
+                    String id = item.getString(TAG_ID);
 
                     hashMap.put(TAG_NICKNAME, nickname);
                     hashMap.put(TAG_COMMENT, comment);
+                    hashMap.put(TAG_ID, id);
 
                     mArrayList.add(hashMap);
                 }
@@ -498,10 +504,11 @@ public class PostActivity extends AppCompatActivity {
             String nickname = (String)params[0];
             String post_id = (String)params[1];
             String comment = (String)params[2];
+            String id = params[3];
 
 
             String serverURL = getString(R.string.sever) + "/comment.php";
-            String postParameters = "nickname=" + nickname + "&post_id=" + post_id + "&comment=" + comment;
+            String postParameters = "nickname=" + nickname + "&post_id=" + post_id + "&comment=" + comment + "&id=" + id;
 
 
             try {
@@ -774,13 +781,14 @@ public class PostActivity extends AppCompatActivity {
                 String date = item.getString(TAG_DATE);
                 String content = item.getString(TAG_CONTENT);
                 String weather = item.getString(TAG_WEATHER);
+                String id = item.getString(TAG_ID);
 
                 WriteDate = date;
                 write_content = content;
                 write_weather = weather;
                 write_title = title;
 
-
+                write_id = id;
                 writer_nickname = nickname;
 
                 tNickname = findViewById(R.id.user_text);

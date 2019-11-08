@@ -51,9 +51,9 @@ public class PageThreeFragment extends Fragment {
 
     private String TAG = "PHPTEST";
     private static final String TAG_JSON="notelist";
-    private static final String TAG_NICKNAME ="recv_nick";
+    private static final String TAG_NICKNAME ="recv_id";
 
-    private static final String TAG_SENDNICK = "send_nick";
+    private static final String TAG_SENDNID = "send_id";
     private static final String TAG_SENDDATE = "date";
     private static final String TAG_CONTENT = "content";
     private static final String TAG_IDX = "idx";
@@ -89,7 +89,7 @@ public class PageThreeFragment extends Fragment {
         tw.setText(nickname + "님의 쪽지함");
 
         getAllNote task = new getAllNote();
-        task.execute(nickname);
+        task.execute(id);
 
         RecyclerView mRecyclerView = v.findViewById(R.id.NoteRecycler);
 
@@ -107,7 +107,7 @@ public class PageThreeFragment extends Fragment {
             @Override
             public void onClick(View view, int pos) {
                 String index = mArrayList.get(pos).get(TAG_IDX);
-                String send_nick = mArrayList.get(pos).get(TAG_SENDNICK);
+                String send_nick = mArrayList.get(pos).get(TAG_SENDNID);
 
                 Intent intent = new Intent(getActivity(), NoteActivity.class);
                 intent.putExtra("INDEX", index);    // 쪽지 index
@@ -166,22 +166,22 @@ public class PageThreeFragment extends Fragment {
     // recyclerview 데이터 추가
     private void getData(){
 
-        List<String> listSendNick = new ArrayList<>();
+        List<String> listSendId = new ArrayList<>();
         List<String> listContent = new ArrayList<>();
         List<String> listdate = new ArrayList<>();
         List<String> listIdx = new ArrayList<>();
 
         for (int i = 0; i < mArrayList.size(); i++) {
-            listSendNick.add(mArrayList.get(i).get(TAG_SENDNICK));
+            listSendId.add(mArrayList.get(i).get(TAG_SENDNID));
             listContent.add(mArrayList.get(i).get(TAG_CONTENT));
             listdate.add(mArrayList.get(i).get(TAG_SENDDATE));
             listIdx.add(mArrayList.get(i).get(TAG_IDX));
         }
 
 
-        for (int i = 0; i < listSendNick.size(); i++) {
+        for (int i = 0; i < listSendId.size(); i++) {
             NoteData data = new NoteData();
-            data.setNickname(listSendNick.get(i));
+            data.setNickname(listSendId.get(i));
             data.setContent(listContent.get(i));
             data.setDate(listdate.get(i));
             mAdapter.addItem(data);
@@ -225,8 +225,8 @@ public class PageThreeFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
-            String recv_nick = (String)params[0];
-            String postParameters = "recv_nick=" + recv_nick;
+            String recv_id = (String)params[0];
+            String postParameters = "recv_id=" + recv_id;
             String serverURL = getString(R.string.sever) + "/NoteList.php";
 
             try {
@@ -296,7 +296,7 @@ public class PageThreeFragment extends Fragment {
                     HashMap<String, String> hashMap = new HashMap<>();
                     JSONObject item = jsonArray.getJSONObject(i);
 
-                    String send_nick = item.getString(TAG_SENDNICK);
+                    String send_id = item.getString(TAG_SENDNID);
                     String date = item.getString(TAG_SENDDATE);
                     String content = item.getString(TAG_CONTENT);
                     String idx = item.getString(TAG_IDX);
@@ -306,7 +306,7 @@ public class PageThreeFragment extends Fragment {
                         content = content.substring(0,10) + "....";
                     }
 
-                    hashMap.put(TAG_SENDNICK, send_nick);
+                    hashMap.put(TAG_SENDNID, send_id);
                     hashMap.put(TAG_SENDDATE, date);
                     hashMap.put(TAG_CONTENT, content);
                     hashMap.put(TAG_IDX, idx);

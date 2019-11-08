@@ -30,7 +30,7 @@ import java.net.URL;
 public class NoteActivity extends AppCompatActivity {
 
     private static final String TAG_IDX = "idx";
-    private static final String TAG_SENDNICK = "send_nick";
+    private static final String TAG_SENDID = "send_id";
     private static final String TAG_SENDDATE = "date";
     private static final String TAG_CONTENT = "content";
     private String TAG = "PHPTEST";
@@ -89,7 +89,7 @@ public class NoteActivity extends AppCompatActivity {
 
                 }
                 else if(position == 1){
-                    GoSendActivity(send_nick, user_nick);
+                    GoSendActivity(send_nick, user_id);
                 }
                 else if(position == 2){
                     DeleteNote Deltask = new DeleteNote();
@@ -114,10 +114,10 @@ public class NoteActivity extends AppCompatActivity {
         finish();
     }
 
-    public void GoSendActivity(String send_nick, String user_nick){
+    public void GoSendActivity(String send_nick, String user_id){
         Intent sendIntent = new Intent(getApplicationContext(), NoteSendActivity.class);
         sendIntent.putExtra("SENDNICK", send_nick);
-        sendIntent.putExtra("USERNICK", user_nick);
+        sendIntent.putExtra("USERID", user_id);
         startActivity(sendIntent);
     }
 
@@ -224,7 +224,7 @@ public class NoteActivity extends AppCompatActivity {
                 JSONObject item = jsonArray.getJSONObject(0);
 
 
-                String nickname = item.getString(TAG_SENDNICK);
+                String id = item.getString(TAG_SENDID);
                 String date = item.getString(TAG_SENDDATE);
                 String content = item.getString(TAG_CONTENT);
 
@@ -233,7 +233,7 @@ public class NoteActivity extends AppCompatActivity {
                 tDate = findViewById(R.id.date_note);
                 tContent = findViewById(R.id.content_note);
 
-                tNickname.setText("보낸이 : " + nickname);
+                tNickname.setText("보낸이 : " + id);
                 tDate.setText(date);
                 tContent.setText(content);
 

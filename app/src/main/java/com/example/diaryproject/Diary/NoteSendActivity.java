@@ -26,9 +26,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class NoteSendActivity extends AppCompatActivity {
-    private String user_nick;
-    private String comment_nick;
-    private String writer_nick;
+    private String user_id;
+    private String comment_id;
+    private String writer_id;
     private String send_nick;
 
     private TextView title;
@@ -47,20 +47,20 @@ public class NoteSendActivity extends AppCompatActivity {
         setContentView(R.layout.activity_note_send);
 
         Intent getIntent = getIntent();
-        user_nick = getIntent.getExtras().getString("USERNICK");
-        comment_nick = getIntent.getExtras().getString("COMMENTNICK");
-        writer_nick = getIntent.getExtras().getString("WRITENICK");
+        user_id = getIntent.getExtras().getString("USERID");
+        comment_id = getIntent.getExtras().getString("COMMENTID");
+        writer_id = getIntent.getExtras().getString("WRITEID");
         send_nick = getIntent.getExtras().getString("SENDNICK");
 
         title = findViewById(R.id.titleText);
         okbtn = findViewById(R.id.noteOk_btn);
         content = findViewById(R.id.noteText);
 
-        if(comment_nick != null){
-            title.setText(comment_nick + " 님에게 쪽지를 보냅니다.");
+        if(comment_id != null){
+            title.setText(comment_id + " 님에게 쪽지를 보냅니다.");
         }
-        else if(writer_nick != null){
-            title.setText(writer_nick + " 님에게 쪽지를 보냅니다.");
+        else if(writer_id != null){
+            title.setText(writer_id + " 님에게 쪽지를 보냅니다.");
         } else if(send_nick != null){
             title.setText(send_nick + "에게 쪽지를 보냅니다");
         }else{
@@ -74,14 +74,14 @@ public class NoteSendActivity extends AppCompatActivity {
                 content_text = content.getText().toString();
                 SendNote task = new SendNote();
 
-                if(comment_nick != null) {
-                    task.execute(user_nick, comment_nick, content_text);
-                    Toast.makeText(getApplicationContext(), comment_nick + " 님에게 쪽지를 보냈습니다!", Toast.LENGTH_LONG).show();
-                } else if(writer_nick != null){
-                    task.execute(user_nick, writer_nick, content_text);
-                    Toast.makeText(getApplicationContext(), writer_nick + " 님에게 쪽지를 보냈습니다!", Toast.LENGTH_LONG).show();
+                if(comment_id != null) {
+                    task.execute(user_id, comment_id, content_text);
+                    Toast.makeText(getApplicationContext(), comment_id + " 님에게 쪽지를 보냈습니다!", Toast.LENGTH_LONG).show();
+                } else if(writer_id != null){
+                    task.execute(user_id, writer_id, content_text);
+                    Toast.makeText(getApplicationContext(), writer_id + " 님에게 쪽지를 보냈습니다!", Toast.LENGTH_LONG).show();
                 } else if(send_nick != null){
-                    task.execute(user_nick, send_nick, content_text);
+                    task.execute(user_id, send_nick, content_text);
                     Toast.makeText(getApplicationContext(), send_nick + " 님에게 쪽지를 보냈습니다!", Toast.LENGTH_LONG).show();
                 } else{
                     Toast.makeText(getApplicationContext(), "에러발생", Toast.LENGTH_LONG).show();
@@ -117,12 +117,12 @@ public class NoteSendActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
 
-            String send_nick = (String)params[0];
-            String recv_nick = (String)params[1];
+            String send_id = (String)params[0];
+            String recv_id = (String)params[1];
             String content = (String)params[2];
 
             String serverURL = getString(R.string.sever)+ "/SendNote.php";
-            String postParameters = "send_nick=" + send_nick + "&recv_nick=" + recv_nick + "&content=" + content;
+            String postParameters = "send_id=" + send_id + "&recv_id=" + recv_id + "&content=" + content;
 
 
             try {
