@@ -4,11 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.style.ForegroundColorSpan;
@@ -20,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.diaryproject.Diary.MainActivity;
+import com.example.diaryproject.Plan.MyService;
 import com.example.diaryproject.Plan.PlanActivity;
 import com.example.diaryproject.account.AccountMainActivity;
 import com.example.diaryproject.sign.SignInActivity;
@@ -47,6 +54,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
@@ -95,7 +103,6 @@ public class SelectMainActivity extends AppCompatActivity {
         diary = findViewById(R.id.Diary_btn);
         cal = findViewById(R.id.Cal_btn);
         logout = findViewById(R.id.main_logout_btn);
-
 
 
         diary.setOnClickListener(new View.OnClickListener() {
@@ -208,6 +215,51 @@ public class SelectMainActivity extends AppCompatActivity {
             }
         }, 1000);
 
+
+        // Noti 알람
+        // 알람 시간 설정
+        SharedPreferences sharedPreferences = getSharedPreferences("daily alarm", MODE_PRIVATE);
+        long millis = sharedPreferences.getLong("nextNotifyTime", Calendar.getInstance().getTimeInMillis());
+        Calendar nextNotify = new GregorianCalendar();
+        nextNotify.setTimeInMillis(millis);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        if(calendar.before(Calendar.getInstance())){
+            calendar.add(Calendar.DATE, 1);
+        }
+
+        SharedPreferences.Editor editor = getSharedPreferences("daily alarm" , MODE_PRIVATE).edit();
+        editor.putLong("nextNotifyTime", calendar.getTimeInMillis());
+        editor.apply();
+
+        diaryNotification(calendar);
+
+    }
+
+    void diaryNotification(Calendar calendar){
+        Context mContext;
+        mContext = getApplicationContext();
+
+        PackageManager pm = mContext.getPackageManager();
+        ComponentName receiver = new ComponentName(mContext, DeviceBootReceiver.class);
+        Intent alaramIntent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alaramIntent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        }
+
+        // 부팅 후 실행되는 리시버 사용 가능하도록
+        pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+
     }
 
 
@@ -301,7 +353,7 @@ public class SelectMainActivity extends AppCompatActivity {
 
 
     // 글 목록이 있는 date들 불러오기
-    private class getPlanDate extends AsyncTask<String, Void, String> {
+    public class getPlanDate extends AsyncTask<String, Void, String> {
 
         ProgressDialog progressDialog;
         String errorString = null;
@@ -463,10 +515,6 @@ public class SelectMainActivity extends AppCompatActivity {
             time = System.currentTimeMillis();
             StyleableToast.makeText(getApplicationContext(), "뒤로가기 버튼을 한번 더 누르면 종료합니다.", Toast.LENGTH_LONG,R.style.backtoast).show();
         } else if(System.currentTimeMillis()-time < 2000){
-            Intent intent = new Intent(SelectMainActivity.this , SelectMainActivity.class);
-            intent.putExtra("user_id", id);
-            intent.putExtra("user_nickname", nickname);
-            startActivity(intent);
             finish();
         }
     }
