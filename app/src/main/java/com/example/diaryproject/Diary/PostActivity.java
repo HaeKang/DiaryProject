@@ -131,7 +131,7 @@ public class PostActivity extends AppCompatActivity {
                 if(user_nickname.equals(comment_nickname)) {
                     final CharSequence[] items_com = {"댓글 삭제하기"};
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PostActivity.this);
-                    alertDialogBuilder.setTitle("댓글 수정삭제");
+                    alertDialogBuilder.setTitle("댓글 삭제");
                     alertDialogBuilder.setItems(items_com, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int index) {
@@ -150,7 +150,7 @@ public class PostActivity extends AppCompatActivity {
                 else{
                     final CharSequence[] items_com = {"쪽지보내기"};
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PostActivity.this);
-                    alertDialogBuilder.setTitle("댓글 수정삭제");
+                    alertDialogBuilder.setTitle("작성자에게 쪽지보내기");
                     alertDialogBuilder.setItems(items_com, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int index) {

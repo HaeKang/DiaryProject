@@ -128,6 +128,7 @@ public class AccountMainActivity extends AppCompatActivity {
                 Intent intent = new Intent(AccountMainActivity.this, CalenderActivity.class);
                 intent.putExtra("user_id", user_id);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -151,6 +152,7 @@ public class AccountMainActivity extends AppCompatActivity {
                 intent.putExtra("user_nickname", user_nick);
                 intent.putExtra("date", View_DATE);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -321,11 +323,6 @@ public class AccountMainActivity extends AppCompatActivity {
                 JSONObject item = jsonArray.getJSONObject(0);
 
                 String sum = item.getString(TAG_SUM);
-
-                if(sum.isEmpty()){
-                    sum_view.setText("0");
-                }
-
                 sum_view.setText(sum);
 
 

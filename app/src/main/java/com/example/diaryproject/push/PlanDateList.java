@@ -1,4 +1,4 @@
-package com.example.diaryproject.Plan;
+package com.example.diaryproject.push;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;

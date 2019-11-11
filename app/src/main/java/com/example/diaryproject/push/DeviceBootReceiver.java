@@ -1,4 +1,4 @@
-package com.example.diaryproject;
+package com.example.diaryproject.push;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

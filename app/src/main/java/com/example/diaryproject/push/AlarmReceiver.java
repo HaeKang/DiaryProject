@@ -1,4 +1,4 @@
-package com.example.diaryproject;
+package com.example.diaryproject.push;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -11,7 +11,8 @@ import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
-import com.example.diaryproject.Plan.PlanDateList;
+import com.example.diaryproject.R;
+import com.example.diaryproject.StartActivity;
 
 import java.util.Calendar;
 

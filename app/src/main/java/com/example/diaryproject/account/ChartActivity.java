@@ -41,12 +41,16 @@ public class ChartActivity extends AppCompatActivity {
     String mJsonString;
     private static final String TAG_JSON="webnautes";
     private String TAG_FOOD = "sum_food";
+    private String TAG_CLOTH  ="sum_cloth";
+    private String TAG_TRAFFIC = "sum_traffic";
     private String TAG_BOOK = "sum_book";
     private String TAG_ELSE = "sum_else";
 
-    private float sum_food;
-    private float sum_book;
-    private float sum_else;
+    private float sum_food = 0;
+    private float sum_book = 0;
+    private float sum_else = 0;
+    private float sum_cloth = 0;
+    private float sum_traffic = 0;
 
 
     @Override
@@ -200,6 +204,18 @@ public class ChartActivity extends AppCompatActivity {
                             sum_else = Integer.parseInt(get_sumelse);
                         }
                     }
+                    if( i == 3 ){
+                        String get_sumcloth = item.getString(TAG_CLOTH);
+                        if(!get_sumcloth.isEmpty()) {
+                            sum_cloth = Integer.parseInt(get_sumcloth);
+                        }
+                    }
+                    if( i == 4 ){
+                        String get_sumtraffic = item.getString(TAG_TRAFFIC);
+                        if(!get_sumtraffic.isEmpty()) {
+                            sum_traffic = Integer.parseInt(get_sumtraffic);
+                        }
+                    }
                 }
 
                 // PIE 차트
@@ -219,11 +235,12 @@ public class ChartActivity extends AppCompatActivity {
 
                 yValues.add(new PieEntry(sum_food,"음식"));
                 yValues.add(new PieEntry(sum_book,"도서"));
+                yValues.add(new PieEntry(sum_cloth,"의류"));
+                yValues.add(new PieEntry(sum_traffic,"교통"));
                 yValues.add(new PieEntry(sum_else,"기타"));
 
-
                 Description description = new Description();
-                description.setText(date + " 패턴 분석");
+                description.setText(date + " 지출 패턴 분석");
                 description.setTextSize(15);
                 chart.setDescription(description);
                 chart.animateY(1000, Easing.EaseInOutCubic); //애니메이션

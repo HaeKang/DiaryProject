@@ -26,9 +26,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.diaryproject.Diary.MainActivity;
-import com.example.diaryproject.Plan.MyService;
 import com.example.diaryproject.Plan.PlanActivity;
 import com.example.diaryproject.account.AccountMainActivity;
+import com.example.diaryproject.push.AlarmReceiver;
+import com.example.diaryproject.push.DeviceBootReceiver;
 import com.example.diaryproject.sign.SignInActivity;
 import com.muddzdev.styleabletoast.StyleableToast;
 import com.prolificinteractive.materialcalendarview.CalendarDay;

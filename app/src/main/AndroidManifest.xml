@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,15 +16,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".push.AlarmSetActivity"></activity>
 
-        <receiver android:name=".DeviceBootReceiver"
+        <receiver
+            android:name=".push.DeviceBootReceiver"
             android:enabled="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name=".AlarmReceiver"></receiver>
+        <receiver android:name=".push.AlarmReceiver" />
 
         <activity
             android:name=".Plan.PlanDeleteActivity"
@@ -45,9 +45,7 @@
         <activity
             android:name=".account.AccountMainActivity"
             android:label="@string/title_activity_account_main" />
-
         <activity android:name=".SelectMainActivity" />
-
         <activity android:name=".Diary.NoteActivity" />
         <activity android:name=".Diary.NoteSendActivity" />
         <activity android:name=".Diary.PostActivity" />

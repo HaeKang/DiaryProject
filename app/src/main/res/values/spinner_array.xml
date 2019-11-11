@@ -13,7 +13,7 @@
     </string-array>
 
     <string-array name="context_spinner">
-        <item>입금</item>
+        <item>월급</item>
         <item>용돈</item>
         <item>도서</item>
         <item>의류</item>
