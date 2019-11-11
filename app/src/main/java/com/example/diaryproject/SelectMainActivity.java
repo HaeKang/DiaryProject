@@ -29,6 +29,7 @@ import com.example.diaryproject.Diary.MainActivity;
 import com.example.diaryproject.Plan.PlanActivity;
 import com.example.diaryproject.account.AccountMainActivity;
 import com.example.diaryproject.push.AlarmReceiver;
+import com.example.diaryproject.push.AlarmSetActivity;
 import com.example.diaryproject.push.DeviceBootReceiver;
 import com.example.diaryproject.sign.SignInActivity;
 import com.muddzdev.styleabletoast.StyleableToast;
@@ -69,6 +70,7 @@ public class SelectMainActivity extends AppCompatActivity {
     ImageButton diary;
     ImageButton cal;
     Button logout;
+    Button alarm;
     TextView plantext;
 
 
@@ -104,6 +106,7 @@ public class SelectMainActivity extends AppCompatActivity {
         diary = findViewById(R.id.Diary_btn);
         cal = findViewById(R.id.Cal_btn);
         logout = findViewById(R.id.main_logout_btn);
+        alarm = findViewById(R.id.main_alarm_btn);
 
 
         diary.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +128,15 @@ public class SelectMainActivity extends AppCompatActivity {
                 intent.putExtra("user_nickname", nickname);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+
+        alarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SelectMainActivity.this, AlarmSetActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -199,9 +211,6 @@ public class SelectMainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
 
-
-
-
             }
         });
 
@@ -219,6 +228,7 @@ public class SelectMainActivity extends AppCompatActivity {
 
         // Noti 알람
         // 알람 시간 설정
+        /*
         SharedPreferences sharedPreferences = getSharedPreferences("daily alarm", MODE_PRIVATE);
         long millis = sharedPreferences.getLong("nextNotifyTime", Calendar.getInstance().getTimeInMillis());
         Calendar nextNotify = new GregorianCalendar();
@@ -242,7 +252,7 @@ public class SelectMainActivity extends AppCompatActivity {
 
     }
 
-    void diaryNotification(Calendar calendar){
+    public void diaryNotification(Calendar calendar){
         Context mContext;
         mContext = getApplicationContext();
 
@@ -260,7 +270,7 @@ public class SelectMainActivity extends AppCompatActivity {
 
         // 부팅 후 실행되는 리시버 사용 가능하도록
         pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-
+*/
     }
 
 

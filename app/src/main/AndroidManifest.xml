@@ -16,7 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".push.AlarmSetActivity"></activity>
+        <activity android:name=".push.AlarmSetActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/popupTheme" />>
 
         <receiver
             android:name=".push.DeviceBootReceiver"
