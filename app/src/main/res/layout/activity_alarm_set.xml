@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@android:color/background_light"
     tools:context=".push.AlarmSetActivity">
 
     <LinearLayout
@@ -24,16 +25,24 @@
 
             <Button
                 android:id="@+id/time_ok_btn"
-                android:layout_width="150dp"
+                android:layout_width="188dp"
                 android:layout_height="wrap_content"
-                android:text="알림설정하기" />
+                android:background="@color/colorPrimary"
+                android:fontFamily="@font/nanumsquareroundr"
+                android:text="알림설정하기"
+                android:textColor="@color/default_text_color"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/time_delete_btn"
                 android:layout_width="172dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="알림삭제하기" />
+                android:background="@color/colorPrimaryDark"
+                android:fontFamily="@font/nanumsquareroundr"
+                android:text="알림삭제하기"
+                android:textColor="@color/default_text_color"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>

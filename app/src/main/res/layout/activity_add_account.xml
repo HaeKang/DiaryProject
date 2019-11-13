@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_light"
     tools:context=".account.AddAccount">
 
     <LinearLayout
@@ -36,6 +37,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/nanumsquareroundr"
                         android:text="수입" />
 
                     <RadioButton
@@ -43,6 +45,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/nanumsquareroundr"
                         android:text="지출" />
                 </RadioGroup>
             </LinearLayout>
@@ -76,8 +79,11 @@
                     android:id="@+id/ok_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:fontFamily="@font/nanumsquareroundr"
                     android:onClick="OnClick_addButton"
-                    android:text="입력" />
+                    android:text="입력"
+                    android:textColor="@android:color/background_light" />
             </LinearLayout>
 
         </LinearLayout>

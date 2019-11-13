@@ -2,8 +2,10 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@android:color/background_light"
     android:orientation="vertical">
 
     <LinearLayout
@@ -21,6 +23,7 @@
             android:layout_marginTop="28dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            android:fontFamily="@font/nanumsquareroundr"
             android:gravity="center"
             android:text="TextView"
             android:textSize="18sp"
@@ -45,6 +48,7 @@
             android:layout_marginTop="40dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            android:fontFamily="@font/nanumsquareroundr"
             android:gravity="center"
             android:text="TextView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -65,17 +69,23 @@
             android:layout_width="85dp"
             android:layout_height="43dp"
             android:layout_marginTop="24dp"
+            android:background="@color/colorAccent"
             android:text="일정추가"
+            android:textColor="@android:color/background_light"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/plan_content_text" />
+            app:layout_constraintTop_toBottomOf="@+id/plan_content_text"
+            android:stateListAnimator="@null"/>
 
         <Button
             android:id="@+id/plan_delete_btn"
             android:layout_width="85dp"
             android:layout_height="43dp"
             android:layout_marginTop="24dp"
+            android:background="@color/colorPrimary"
             android:text="일정삭제"
-            app:layout_constraintTop_toBottomOf="@+id/plan_content_text" />
+            android:textColor="@android:color/background_light"
+            app:layout_constraintTop_toBottomOf="@+id/plan_content_text"
+            android:stateListAnimator="@null"/>
     </LinearLayout>
 
 </LinearLayout>

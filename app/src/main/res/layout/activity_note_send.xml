@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_light"
     tools:context=".Diary.NoteSendActivity">
 
     <LinearLayout
@@ -22,6 +23,7 @@
                 android:id="@+id/titleText"
                 android:layout_width="310dp"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/nanumsquareroundr"
                 android:paddingLeft="10dp"
                 android:text="id님께 쪽지를 보냅니다" />
 
@@ -30,8 +32,13 @@
                 android:layout_width="236dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@color/pink"
+                android:fontFamily="@font/nanumsquareroundr"
                 android:paddingTop="10dp"
-                android:text="보내기" />
+                android:stateListAnimator="@null"
+                android:text="전송하기"
+                android:textColor="@android:color/background_light"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -53,6 +60,7 @@
                     android:layout_marginTop="10dp"
                     android:background="@null"
                     android:ems="10"
+                    android:fontFamily="@font/nanumsquareroundr"
                     android:hint="내용을 입력하세요" />
             </LinearLayout>
         </ScrollView>

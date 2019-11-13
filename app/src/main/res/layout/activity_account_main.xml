@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_light"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -28,20 +29,31 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_weight="1"
-                android:text="날짜선택" />
+                android:background="@android:color/background_light"
+                android:fontFamily="@font/nanumsquareroundr"
+                android:stateListAnimator="@null"
+                android:text="날짜선택"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/pie_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="오늘의 지출 차트" />
+                android:background="@android:color/background_light"
+                android:fontFamily="@font/nanumsquareroundr"
+                android:stateListAnimator="@null"
+                android:text="오늘의 지출 차트"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@android:color/background_light"
             android:orientation="vertical">
 
             <TextView
@@ -65,7 +77,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/account_list"
                 android:layout_width="match_parent"
-                android:layout_height="450dp"
+                android:layout_height="match_parent"
                 android:layout_marginTop="10dp" />
 
         </LinearLayout>
@@ -73,14 +85,16 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
+                android:fontFamily="@font/nanumsquareroundr"
                 android:gravity="center_vertical|right"
-                android:text="Total : "
+                android:text="합계 :"
                 android:textSize="24dp" />
 
             <TextView
@@ -89,6 +103,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
+                android:fontFamily="@font/nanumsquareroundr"
                 android:gravity="center_vertical"
                 android:hint="0"
                 android:textSize="24dp" />
@@ -105,7 +120,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="입력하기" />
+                android:background="@color/colorPrimary"
+                android:stateListAnimator="@null"
+                android:text="입력하기"
+                android:textColor="@android:color/background_light" />
 
         </LinearLayout>
 

@@ -1,22 +1,28 @@
 package com.example.diaryproject.account;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.example.diaryproject.Diary.MainActivity;
+import com.example.diaryproject.Diary.PostActivity;
 import com.example.diaryproject.R;
 import com.example.diaryproject.SelectMainActivity;
 import com.muddzdev.styleabletoast.StyleableToast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -53,8 +59,10 @@ public class AccountMainActivity extends AppCompatActivity {
     private Button btn_go_add;
     private TextView sum_view;
 
+
     String user_id;
     String user_nick;
+    String Account_idx;
 
     public static String View_DATE = getToday_date();
 
@@ -65,9 +73,11 @@ public class AccountMainActivity extends AppCompatActivity {
 
     String TAG_CONTEXT = "context";
     String TAG_PRICE = "price";
+    String TAG_IDX = "idx";
 
     ArrayList<HashMap<String,String>> mArrayList = new ArrayList<>();
     private RecyclerAdapter mAdapter;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +92,7 @@ public class AccountMainActivity extends AppCompatActivity {
         thedate = (TextView) findViewById(R.id.date);
         btn_go_calendar = (Button) findViewById(R.id.btn_go_calendar);
         btn_go_chart = findViewById(R.id.pie_btn);
-        RecyclerView mRecyclerView = findViewById(R.id.account_list);
+        mRecyclerView = findViewById(R.id.account_list);
         sum_view = (TextView) findViewById(R.id.total_sum);
         btn_go_add = findViewById(R.id.goAdd);
 
@@ -114,6 +124,36 @@ public class AccountMainActivity extends AppCompatActivity {
         AccountList taskList = new AccountList();
         taskList.execute(user_id, View_DATE);
 
+        // 리스트 클릭 이벤트
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListenerAccount(getApplicationContext(), mRecyclerView, new ClickListenerAccount() {
+            @Override
+            public void onClick(View view, int pos) {
+                Account_idx = mArrayList.get(pos).get(TAG_IDX);
+
+                final CharSequence[] items_com = {"리스트 삭제하기"};
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AccountMainActivity.this);
+                alertDialogBuilder.setTitle("삭제");
+                alertDialogBuilder.setItems(items_com, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int index) {
+                        if(index == 0){
+
+                            DeleteAccount deleteAccount = new DeleteAccount();
+                            deleteAccount.execute(Account_idx);
+
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
+
+            @Override
+            public void onLongClick(View view, int pos) {
+
+            }
+        }));
 
         // 총합 가격 표시
 
@@ -167,15 +207,70 @@ public class AccountMainActivity extends AppCompatActivity {
         return Today_day;
     }
 
+    // 리스트 클릭 이벤트
+    public interface ClickListenerAccount{
+        void onClick(View view, int pos);
+        void onLongClick(View view, int pos);
+    }
+
+    public static class RecyclerTouchListenerAccount implements RecyclerView.OnItemTouchListener{
+        private GestureDetector gestureDetector;
+        private ClickListenerAccount clickListener;
+
+        public RecyclerTouchListenerAccount (Context context, final RecyclerView recyclerView, final ClickListenerAccount clickListener){
+            this.clickListener = clickListener;
+            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
+                public boolean onSingleTapUp(MotionEvent e){
+                    return true;
+                }
+
+                public void onLongPress(MotionEvent e){
+                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                    if(child != null && clickListener != null){
+                        clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
+                    }
+                }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+            if(child != null && clickListener != null && gestureDetector.onTouchEvent(e)){
+                clickListener.onClick(child, rv.getChildAdapterPosition(child));
+            }
+
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+        }
+    }
+
+
 
     // recyclerview 데이터 추가
     private void getData(){
+        Log.d("test"," getData 호출");
         List<String> listContext = new ArrayList<>();
         List<String> listPrice = new ArrayList<>();
+        List<String> listIdx = new ArrayList<>();
+
+        listContext.clear();
+        listPrice.clear();
+        listIdx.clear();
 
         for (int i = 0; i < mArrayList.size(); i++) {
             listContext.add(mArrayList.get(i).get(TAG_CONTEXT));
             listPrice.add(mArrayList.get(i).get(TAG_PRICE));
+            listIdx.add(mArrayList.get(i).get(TAG_IDX));
         }
 
         for (int i = 0; i < listContext.size(); i++) {
@@ -205,8 +300,6 @@ public class AccountMainActivity extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
 
     }
-
-
 
 
 
@@ -452,9 +545,11 @@ public class AccountMainActivity extends AppCompatActivity {
 
                     String context = item.getString(TAG_CONTEXT);
                     String price = item.getString(TAG_PRICE);
+                    String idx = item.getString(TAG_IDX);
 
                     hashMap.put(TAG_CONTEXT, context);
                     hashMap.put(TAG_PRICE, price);
+                    hashMap.put(TAG_IDX, idx);
 
                     mArrayList.add(hashMap);
                 }
@@ -465,6 +560,99 @@ public class AccountMainActivity extends AppCompatActivity {
             } catch (JSONException e) {
 
                 Log.d(TAG, "showResult : ", e);
+            }
+
+        }
+    }
+
+    // 삭제
+    class DeleteAccount extends AsyncTask<String, Void, String> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = ProgressDialog.show(AccountMainActivity.this,
+                    "Please Wait", null, true, true);
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+            Toast.makeText(AccountMainActivity.this, "삭제 완료", Toast.LENGTH_LONG).show();
+            AccountList accountList = new AccountList();
+            accountList.execute(user_id, View_DATE);
+            mRecyclerView.setAdapter(null);
+            mAdapter = new RecyclerAdapter();
+            mRecyclerView.setAdapter(mAdapter);
+            Log.d(TAG, "POST response  - " + result);
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String idx = (String)params[0];
+
+            String serverURL = getString(R.string.sever) + "/DeleteAccount.php";
+            String postParameters = "idx=" + idx;
+
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.connect();
+
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "POST response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+
+
+                bufferedReader.close();
+
+
+                return sb.toString();
+
+
+            } catch (Exception e) {
+
+                Log.d(TAG, "InsertData: Error ", e);
+
+                return new String("Error: " + e.getMessage());
             }
 
         }

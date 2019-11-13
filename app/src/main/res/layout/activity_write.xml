@@ -66,43 +66,52 @@
 
                 <RadioButton
                     android:id="@+id/sun_weather"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
                     android:button="@xml/sun_button"
+                    android:scaleType="fitCenter"
                     android:scaleX="0.75"
                     android:scaleY="0.75"
                     android:text="" />
 
                 <RadioButton
                     android:id="@+id/suncloud_weather"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
                     android:button="@xml/suncloud_button"
+                    android:scaleX="0.75"
+                    android:scaleY="0.75"
                     android:text="" />
 
                 <RadioButton
                     android:id="@+id/cloud_weather"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
                     android:button="@xml/cloud_button"
+                    android:scaleX="0.75"
+                    android:scaleY="0.75"
                     android:text="" />
 
                 <RadioButton
                     android:id="@+id/rain_weather"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
                     android:button="@xml/rain_button"
+                    android:scaleX="0.75"
+                    android:scaleY="0.75"
                     android:text="" />
 
                 <RadioButton
                     android:id="@+id/snow_weather"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:button="@xml/snow_button"
+                    android:scaleX="0.75"
+                    android:scaleY="0.75"
                     android:text="" />
             </RadioGroup>
 
@@ -169,7 +178,10 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            android:background="@color/colorPrimary"
+            android:stateListAnimator="@null"
             android:text="글쓰기"
+            android:textColor="@android:color/background_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"

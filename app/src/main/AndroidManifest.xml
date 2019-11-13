@@ -18,7 +18,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".push.AlarmSetActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/popupTheme" />>
+            android:theme="@style/popupTheme" />
 
         <receiver
             android:name=".push.DeviceBootReceiver"
@@ -27,6 +27,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         <receiver android:name=".push.AlarmReceiver" />
 
         <activity

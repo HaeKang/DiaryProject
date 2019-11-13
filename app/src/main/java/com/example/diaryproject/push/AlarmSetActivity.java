@@ -43,13 +43,31 @@ public class AlarmSetActivity extends AppCompatActivity {
         picker.setIs24HourView(true);
 
 
+        // 앞서 설정한 값으로 보여주기
+        // 없으면 디폴트 값은 현재시간
         SharedPreferences sharedPreferences = getSharedPreferences("daily alarm", MODE_PRIVATE);
         long millis = sharedPreferences.getLong("nextNotifyTime", Calendar.getInstance().getTimeInMillis());
-        Calendar nextNotify = new GregorianCalendar();
-        nextNotify.setTimeInMillis(millis);
+        Calendar nextNotifyTime = new GregorianCalendar();
+        nextNotifyTime.setTimeInMillis(millis);
 
 
-        final Calendar calendar = Calendar.getInstance();
+        // 이전 설정값으로 TimePicker 초기화
+        Date currentTime = nextNotifyTime.getTime();
+        SimpleDateFormat HourFormat = new SimpleDateFormat("kk", Locale.getDefault());
+        SimpleDateFormat MinuteFormat = new SimpleDateFormat("mm", Locale.getDefault());
+        int pre_hour = Integer.parseInt(HourFormat.format(currentTime));
+        int pre_minute = Integer.parseInt(MinuteFormat.format(currentTime));
+
+        if (Build.VERSION.SDK_INT >= 23 ){
+            picker.setHour(pre_hour);
+            picker.setMinute(pre_minute);
+        }
+        else{
+            picker.setCurrentHour(pre_hour);
+            picker.setCurrentMinute(pre_minute);
+        }
+
+
 
         // 현재 지정된 시간으로 알람 시간 설정
         ok.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +93,7 @@ public class AlarmSetActivity extends AppCompatActivity {
                     am_pm="AM";
                 }
                 // 현재 지정된 시간으로 알람 시간 설정
+                Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(System.currentTimeMillis());
                 calendar.set(Calendar.HOUR_OF_DAY, hour_24);
                 calendar.set(Calendar.MINUTE, minute);
@@ -105,6 +124,7 @@ public class AlarmSetActivity extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
                 DeletediaryNotification(calendar);
                 finish();
             }
@@ -121,10 +141,12 @@ public class AlarmSetActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alaramIntent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        if(alarmManager != null){
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
         }
 
         // 부팅 후 실행되는 리시버 사용 가능하도록

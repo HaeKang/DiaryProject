@@ -64,6 +64,7 @@
                 android:id="@+id/autologin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/nanumsquareroundr"
                 android:text="자동로그인" />
 
             <Button

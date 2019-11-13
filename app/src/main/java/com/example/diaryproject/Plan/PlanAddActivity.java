@@ -88,12 +88,10 @@ public class PlanAddActivity extends AppCompatActivity {
                 Intent intent = new Intent(PlanAddActivity.this, SelectMainActivity.class);
                 intent.putExtra("user_id", user_id);
                 intent.putExtra("user_nickname", user_nick);
-
-                //SelectMainActivity sm = (SelectMainActivity) SelectMainActivity.Select_Main_Activity;
-                //sm.finish();
-
                 startActivity(intent);
 
+                SelectMainActivity sm = (SelectMainActivity) SelectMainActivity.Select_Main_Activity;
+                sm.finish();
 
                 finish();
 

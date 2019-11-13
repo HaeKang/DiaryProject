@@ -4,17 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.style.ForegroundColorSpan;
@@ -28,9 +22,7 @@ import android.widget.Toast;
 import com.example.diaryproject.Diary.MainActivity;
 import com.example.diaryproject.Plan.PlanActivity;
 import com.example.diaryproject.account.AccountMainActivity;
-import com.example.diaryproject.push.AlarmReceiver;
 import com.example.diaryproject.push.AlarmSetActivity;
-import com.example.diaryproject.push.DeviceBootReceiver;
 import com.example.diaryproject.sign.SignInActivity;
 import com.muddzdev.styleabletoast.StyleableToast;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -56,7 +48,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
@@ -97,7 +88,6 @@ public class SelectMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select_main);
 
         Select_Main_Activity = SelectMainActivity.this;
-
 
         Intent intent = getIntent();
         id = intent.getExtras().getString("user_id");

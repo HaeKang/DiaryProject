@@ -52,7 +52,11 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                android:text="중복확인" />
+                android:background="@color/colorAccent"
+                android:stateListAnimator="@null"
+                android:text="중복확인"
+                android:textColor="@android:color/background_light"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -106,13 +110,17 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                android:text="중복확인" />
+                android:background="@color/colorPrimary"
+                android:stateListAnimator="@null"
+                android:text="중복확인"
+                android:textColor="@android:color/background_light"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <Button
             android:id="@+id/Signup_btn"
-            android:layout_width="150dp"
-            android:layout_height="59dp"
+            android:layout_width="157dp"
+            android:layout_height="43dp"
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
