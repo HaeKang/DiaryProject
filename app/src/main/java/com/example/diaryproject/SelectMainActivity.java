@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -82,6 +83,8 @@ public class SelectMainActivity extends AppCompatActivity {
 
     public static Activity Select_Main_Activity;
 
+    private SharedPreferences loginInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +100,10 @@ public class SelectMainActivity extends AppCompatActivity {
         cal = findViewById(R.id.Cal_btn);
         logout = findViewById(R.id.main_logout_btn);
         alarm = findViewById(R.id.main_alarm_btn);
+
+        // db받아오는고
+        loginInfo = getSharedPreferences("setting", Context.MODE_PRIVATE);
+        final String auto_loginid = loginInfo.getString("id", null);
 
 
         diary.setOnClickListener(new View.OnClickListener() {
@@ -125,8 +132,12 @@ public class SelectMainActivity extends AppCompatActivity {
         alarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SelectMainActivity.this, AlarmSetActivity.class);
-                startActivity(intent);
+                if(auto_loginid == null){
+                    StyleableToast.makeText(getApplicationContext(), "자동로그인 상태에서만 가능합니다", Toast.LENGTH_LONG,R.style.backtoast).show();
+                }else{
+                    Intent intent = new Intent(SelectMainActivity.this, AlarmSetActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -215,52 +226,6 @@ public class SelectMainActivity extends AppCompatActivity {
             }
         }, 1000);
 
-
-        // Noti 알람
-        // 알람 시간 설정
-        /*
-        SharedPreferences sharedPreferences = getSharedPreferences("daily alarm", MODE_PRIVATE);
-        long millis = sharedPreferences.getLong("nextNotifyTime", Calendar.getInstance().getTimeInMillis());
-        Calendar nextNotify = new GregorianCalendar();
-        nextNotify.setTimeInMillis(millis);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 12);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-
-        if(calendar.before(Calendar.getInstance())){
-            calendar.add(Calendar.DATE, 1);
-        }
-
-        SharedPreferences.Editor editor = getSharedPreferences("daily alarm" , MODE_PRIVATE).edit();
-        editor.putLong("nextNotifyTime", calendar.getTimeInMillis());
-        editor.apply();
-
-        diaryNotification(calendar);
-
-    }
-
-    public void diaryNotification(Calendar calendar){
-        Context mContext;
-        mContext = getApplicationContext();
-
-        PackageManager pm = mContext.getPackageManager();
-        ComponentName receiver = new ComponentName(mContext, DeviceBootReceiver.class);
-        Intent alaramIntent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alaramIntent, 0);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        }
-
-        // 부팅 후 실행되는 리시버 사용 가능하도록
-        pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-*/
     }
 
 

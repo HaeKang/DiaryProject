@@ -18,6 +18,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.diaryproject.R;
+import com.example.diaryproject.SelectMainActivity;
+import com.muddzdev.styleabletoast.StyleableToast;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -211,4 +213,15 @@ public class AddAccount extends AppCompatActivity {
 
         }
     }
+
+    //뒤로버튼 event
+    public void onBackPressed(){
+        Intent intent = new Intent(AddAccount.this , AccountMainActivity.class);
+        intent.putExtra("user_id", user_id);
+        intent.putExtra("user_nickname", user_nick);
+        startActivity(intent);
+        finish();
+
+    }
+
 }

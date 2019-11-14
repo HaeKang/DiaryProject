@@ -50,20 +50,22 @@
                             android:id="@+id/write"
                             android:layout_width="206dp"
                             android:layout_height="50dp"
-                            android:background="@color/colorPrimary"
+                            android:background="@android:color/background_light"
                             android:fontFamily="@font/nanumsquareroundr"
                             android:gravity="center"
+                            android:stateListAnimator="@null"
                             android:text="글쓰기"
-                            android:textColor="@android:color/background_light" />
+                            android:textColor="@color/colorPrimary" />
 
                         <Button
                             android:id="@+id/logout_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="50dp"
                             android:layout_weight="1"
-                            android:background="@color/colorAccent"
+                            android:background="@android:color/background_light"
+                            android:stateListAnimator="@null"
                             android:text="로그아웃"
-                            android:textColor="@android:color/background_light" />
+                            android:textColor="@color/colorAccent" />
                     </LinearLayout>
 
                 </LinearLayout>

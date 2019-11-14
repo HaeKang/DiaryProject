@@ -63,6 +63,7 @@ public class PlanDeleteActivity extends AppCompatActivity {
         mAdapter = new PlanRecyclerAdapter();
         recyclerView.setAdapter(mAdapter);
 
+
         getData(content_list, idx_list);
 
         // list 클릭 event
@@ -87,14 +88,14 @@ public class PlanDeleteActivity extends AppCompatActivity {
 
     // recyclerview 데이터 추가
     private void getData(ArrayList<String> content_list, ArrayList<String> idx_list){
-        for (int i = 0; i < content_list.size(); i++) {
-            PlanData data = new PlanData();
-            data.setContent(content_list.get(i));
-            data.setIdx(idx_list.get(i));
-            mAdapter.addItem(data);
-        }
+            for (int i = 0; i < content_list.size(); i++) {
+                PlanData data = new PlanData();
+                data.setContent(content_list.get(i));
+                data.setIdx(idx_list.get(i));
+                mAdapter.addItem(data);
+            }
+            mAdapter.notifyDataSetChanged();
 
-        mAdapter.notifyDataSetChanged();
 
     }
 

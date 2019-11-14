@@ -18,7 +18,6 @@
         <item name="stTextSize">14sp</item>
         <item name="stColorBackground">#ff9a9e</item>
         <item name="stSolidBackground">true</item>
-        <item name="stIconStart">@drawable/login_id</item>
         <item name="stRadius">5dp</item>
     </style>
 

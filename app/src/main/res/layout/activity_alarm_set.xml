@@ -25,24 +25,24 @@
 
             <Button
                 android:id="@+id/time_ok_btn"
-                android:layout_width="188dp"
+                android:layout_width="149dp"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:fontFamily="@font/nanumsquareroundr"
+                android:background="@android:color/background_light"
+                android:fontFamily="sans-serif"
+                android:stateListAnimator="@null"
                 android:text="알림설정하기"
-                android:textColor="@color/default_text_color"
-                android:textStyle="bold" />
+                android:textColor="@color/colorPrimary" />
 
             <Button
                 android:id="@+id/time_delete_btn"
                 android:layout_width="172dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorPrimaryDark"
-                android:fontFamily="@font/nanumsquareroundr"
+                android:background="@android:color/background_light"
+                android:fontFamily="sans-serif"
+                android:stateListAnimator="@null"
                 android:text="알림삭제하기"
-                android:textColor="@color/default_text_color"
-                android:textStyle="bold" />
+                android:textColor="@color/blue" />
         </LinearLayout>
 
     </LinearLayout>

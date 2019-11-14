@@ -36,6 +36,7 @@ public class ChartActivity extends AppCompatActivity {
 
     private PieChart chart;
     private String user_id;
+    private String user_nick;
     private String date;
 
     String mJsonString;
@@ -60,6 +61,7 @@ public class ChartActivity extends AppCompatActivity {
 
         Intent getIntent = getIntent();
         user_id = getIntent.getStringExtra("user_id");
+        user_nick = getIntent.getExtras().getString("user_nickname");
         date = getIntent.getStringExtra("date");
 
         ValueSum task = new ValueSum();
@@ -183,7 +185,6 @@ public class ChartActivity extends AppCompatActivity {
                 for(int i=0; i<jsonArray.length(); i++){
 
                     JSONObject item = jsonArray.getJSONObject(i);
-                    // null 체크 부분 수정 필요
                     if(i == 0){
                         String get_sumfood = item.getString(TAG_FOOD);
                         if(!get_sumfood.isEmpty()) {
@@ -233,11 +234,21 @@ public class ChartActivity extends AppCompatActivity {
 
                 ArrayList<PieEntry> yValues = new ArrayList<>();
 
-                yValues.add(new PieEntry(sum_food,"음식"));
-                yValues.add(new PieEntry(sum_book,"도서"));
-                yValues.add(new PieEntry(sum_cloth,"의류"));
-                yValues.add(new PieEntry(sum_traffic,"교통"));
-                yValues.add(new PieEntry(sum_else,"기타"));
+                if(sum_food != 0){
+                    yValues.add(new PieEntry(sum_food,"음식"));
+                }
+                if(sum_book != 0){
+                    yValues.add(new PieEntry(sum_book,"도서"));
+                }
+                if(sum_cloth != 0){
+                    yValues.add(new PieEntry(sum_cloth,"의류"));
+                }
+                if(sum_traffic != 0){
+                    yValues.add(new PieEntry(sum_traffic,"교통"));
+                }
+                if( sum_else != 0){
+                    yValues.add(new PieEntry(sum_else,"기타"));
+                }
 
                 Description description = new Description();
                 description.setText(date + " 지출 패턴 분석");
@@ -265,6 +276,13 @@ public class ChartActivity extends AppCompatActivity {
     }
 
 
-
+    //뒤로버튼 event
+    public void onBackPressed(){
+        Intent intent = new Intent(ChartActivity.this , AccountMainActivity.class);
+        intent.putExtra("user_id", user_id);
+        intent.putExtra("user_nickname", user_nick);
+        startActivity(intent);
+        finish();
+    }
 
 }

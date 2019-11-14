@@ -10,8 +10,10 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.diaryproject.R;
+import com.example.diaryproject.SelectMainActivity;
 import com.example.diaryproject.StartActivity;
 
 import java.util.Calendar;
@@ -30,7 +32,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         loginInfo = context.getSharedPreferences("setting", Context.MODE_PRIVATE);
         String auto_loginid = loginInfo.getString("id", null);
 
-        if (auto_loginid.isEmpty()) {
+        if (auto_loginid == null) {
 
         } else {
             final PlanDateList task = new PlanDateList();

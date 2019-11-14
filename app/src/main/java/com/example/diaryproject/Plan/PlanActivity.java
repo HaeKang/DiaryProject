@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.diaryproject.R;
 
@@ -47,7 +48,7 @@ public class PlanActivity extends AppCompatActivity {
 
 
         title = findViewById(R.id.plan_title_text);
-        title.setText(user_nick + "님의 " + select_date + " 일정");
+        title.setText(user_nick + "님의 \n" + select_date + " 일정");
 
 
         content = findViewById(R.id.plan_content_text);
@@ -83,13 +84,17 @@ public class PlanActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 삭제 db
-                Intent intent = new Intent(PlanActivity.this, PlanDeleteActivity.class);
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_nick", user_nick);
-                intent.putExtra("content",content_list);
-                intent.putExtra("idx",idx_list);
-                startActivity(intent);
-                finish();
+                if(content_list == null){
+                    Toast.makeText(PlanActivity.this, "삭제할 일정이 없습니다!", Toast.LENGTH_LONG).show();
+                }else {
+                    Intent intent = new Intent(PlanActivity.this, PlanDeleteActivity.class);
+                    intent.putExtra("user_id", user_id);
+                    intent.putExtra("user_nick", user_nick);
+                    intent.putExtra("content",content_list);
+                    intent.putExtra("idx",idx_list);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 

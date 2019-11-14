@@ -17,6 +17,7 @@ public class CalenderActivity extends AppCompatActivity {
     private static final String TAG = "CalendarActivity";
     private CalendarView mCalendarView;
     String user_id;
+    String user_nick;
 
 
     @Override
@@ -26,6 +27,8 @@ public class CalenderActivity extends AppCompatActivity {
 
         Intent idIntent = getIntent();
         user_id = idIntent.getExtras().getString("user_id");
+        user_nick = idIntent.getExtras().getString("user_nickname");
+
 
         mCalendarView = (CalendarView) findViewById(R.id.calendarView);
 
@@ -43,6 +46,15 @@ public class CalenderActivity extends AppCompatActivity {
             }
         });
 
-
     }
+
+    //뒤로버튼 event
+    public void onBackPressed(){
+        Intent intent = new Intent(CalenderActivity.this , AccountMainActivity.class);
+        intent.putExtra("user_id", user_id);
+        intent.putExtra("user_nickname", user_nick);
+        startActivity(intent);
+        finish();
+    }
+
 }

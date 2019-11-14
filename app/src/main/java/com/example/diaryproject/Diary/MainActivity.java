@@ -59,7 +59,7 @@ public class MainActivity extends FragmentActivity {
     public void onBackPressed(){
         if(System.currentTimeMillis()-time >= 2000){
             time = System.currentTimeMillis();
-            StyleableToast.makeText(getApplicationContext(), "뒤로가기 버튼을 한번 더 누르면 메인으로 갑니다.", Toast.LENGTH_LONG,R.style.backtoast).show();
+            StyleableToast.makeText(getApplicationContext(), "뒤로가기 버튼을 한번 더 누르면 \n메인으로 갑니다.", Toast.LENGTH_LONG,R.style.backtoast).show();
         } else if(System.currentTimeMillis()-time < 2000){
             Intent intent = new Intent(MainActivity.this , SelectMainActivity.class);
             intent.putExtra("user_id", id);
