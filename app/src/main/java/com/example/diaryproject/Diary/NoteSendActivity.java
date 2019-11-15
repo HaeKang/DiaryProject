@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.diaryproject.R;
 import com.example.diaryproject.sign.SignUpActivity;
+import com.muddzdev.styleabletoast.StyleableToast;
 
 import org.w3c.dom.Text;
 
@@ -29,7 +30,7 @@ public class NoteSendActivity extends AppCompatActivity {
     private String user_id;
     private String comment_id;
     private String writer_id;
-    private String send_nick;
+    private String send_id;
 
     private TextView title;
     private Button okbtn;
@@ -50,7 +51,8 @@ public class NoteSendActivity extends AppCompatActivity {
         user_id = getIntent.getExtras().getString("USERID");
         comment_id = getIntent.getExtras().getString("COMMENTID");
         writer_id = getIntent.getExtras().getString("WRITEID");
-        send_nick = getIntent.getExtras().getString("SENDNICK");
+        send_id = getIntent.getExtras().getString("SENDID");
+
 
         title = findViewById(R.id.titleText);
         okbtn = findViewById(R.id.noteOk_btn);
@@ -61,8 +63,8 @@ public class NoteSendActivity extends AppCompatActivity {
         }
         else if(writer_id != null){
             title.setText(writer_id + " 님에게 쪽지를 보냅니다.");
-        } else if(send_nick != null){
-            title.setText(send_nick + "에게 쪽지를 보냅니다");
+        } else if(send_id != null){
+            title.setText(send_id + "에게 쪽지를 보냅니다");
         }else{
             title.setText("에러발생");
         }
@@ -76,13 +78,13 @@ public class NoteSendActivity extends AppCompatActivity {
 
                 if(comment_id != null) {
                     task.execute(user_id, comment_id, content_text);
-                    Toast.makeText(getApplicationContext(), comment_id + " 님에게 쪽지를 보냈습니다!", Toast.LENGTH_LONG).show();
+                    StyleableToast.makeText(getApplicationContext(), comment_id + " 님에게 쪽지를 보냈습니다!", Toast.LENGTH_LONG,R.style.backtoast).show();
                 } else if(writer_id != null){
                     task.execute(user_id, writer_id, content_text);
-                    Toast.makeText(getApplicationContext(), writer_id + " 님에게 쪽지를 보냈습니다!", Toast.LENGTH_LONG).show();
-                } else if(send_nick != null){
-                    task.execute(user_id, send_nick, content_text);
-                    Toast.makeText(getApplicationContext(), send_nick + " 님에게 쪽지를 보냈습니다!", Toast.LENGTH_LONG).show();
+                    StyleableToast.makeText(getApplicationContext(), writer_id + " 님에게 쪽지를 보냈습니다!", Toast.LENGTH_LONG,R.style.backtoast).show();
+                } else if(send_id != null){
+                    task.execute(user_id, send_id, content_text);
+                    StyleableToast.makeText(getApplicationContext(), send_id + " 님에게 쪽지를 보냈습니다!", Toast.LENGTH_LONG,R.style.backtoast).show();
                 } else{
                     Toast.makeText(getApplicationContext(), "에러발생", Toast.LENGTH_LONG).show();
                 }

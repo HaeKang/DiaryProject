@@ -64,8 +64,8 @@ public class MainActivity extends FragmentActivity {
             Intent intent = new Intent(MainActivity.this , SelectMainActivity.class);
             intent.putExtra("user_id", id);
             intent.putExtra("user_nickname", nickname);
-            startActivity(intent);
             finish();
+            startActivity(intent);
         }
     }
 }

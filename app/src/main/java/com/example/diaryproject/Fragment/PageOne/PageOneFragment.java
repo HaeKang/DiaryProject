@@ -72,6 +72,7 @@ public class PageOneFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_page_one, container, false);
 
+        // 현재 사용자
         final String id = getArguments().getString("user_id");
         final String nickname = getArguments().getString("user_nick");
 

@@ -219,17 +219,17 @@ public class PostActivity extends AppCompatActivity {
                                 state_post = "delete";
                                 ReadPost deletetask = new ReadPost();
                                 deletetask.execute(post_id, state_post);
+                                finish();
                             } else if(index == 1){
                                 // 글 수정
                                 if(RealTodayDate.equals(WriteDate)){
-
-                                    Toast.makeText(getApplicationContext(),"수정고고",Toast.LENGTH_LONG).show();
                                     Intent WriteIntent = new Intent(getApplicationContext(), WriteActivity.class);
                                     WriteIntent.putExtra("user_id", user_id);
                                     WriteIntent.putExtra("user_nick",user_nickname);
                                     WriteIntent.putExtra("content", write_content);
                                     WriteIntent.putExtra("title", write_title);
                                     WriteIntent.putExtra("weather", write_weather);
+                                    WriteIntent.putExtra("post_id",post_id);
                                     startActivity(WriteIntent);
                                     finish();
 
@@ -256,7 +256,7 @@ public class PostActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int index) {
                             if(index == 0){
                                 Intent intentNoteWri = new Intent(getApplicationContext(), NoteSendActivity.class);
-                                intentNoteWri.putExtra("USERNICK", user_nickname);
+                                intentNoteWri.putExtra("USERID", user_id);
                                 intentNoteWri.putExtra("WRITEID", write_id);
                                 startActivity(intentNoteWri);
                             }

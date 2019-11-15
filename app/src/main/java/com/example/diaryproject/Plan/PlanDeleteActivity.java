@@ -78,6 +78,10 @@ public class PlanDeleteActivity extends AppCompatActivity {
                 intent.putExtra("user_id",user_id);
                 intent.putExtra("user_nickname",user_nick);
                 startActivity(intent);
+
+                SelectMainActivity sm = (SelectMainActivity) SelectMainActivity.Select_Main_Activity;
+                sm.finish();
+
                 finish();
 
             }

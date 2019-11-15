@@ -29,12 +29,18 @@
 
             <TextView
                 android:id="@+id/titleText"
-                android:layout_width="322dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nanumsquareroundr"
                 android:paddingLeft="10dp"
                 android:text="id님께 쪽지를 보냅니다"
                 android:textStyle="bold" />
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/noteOk_btn"

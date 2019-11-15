@@ -83,8 +83,10 @@ public class SignUpActivity extends AppCompatActivity {
                 state_check = "id";
                 id = Id.getText().toString();
 
-                if( id.equals(null)){
+                // null 처리
+                if( id.getBytes().length <=0){
                     Toast.makeText(getApplicationContext(),"아이디를 입력하세요",Toast.LENGTH_LONG).show();
+                    Id.requestFocus();
                 }
                 else {
                     CheckIdNick taskId = new CheckIdNick();
@@ -102,8 +104,9 @@ public class SignUpActivity extends AppCompatActivity {
                 state_check = "nickname";
                 nickname = Nickname.getText().toString();
 
-                if(nickname.equals(null)) {
+                if(nickname.getBytes().length <= 0) {
                     Toast.makeText(getApplicationContext(),"닉네임을 입력하세요",Toast.LENGTH_LONG).show();
+                    Pw.requestFocus();
                 }
                 else{
                     CheckIdNick taskNick = new CheckIdNick();

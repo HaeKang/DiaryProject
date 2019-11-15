@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="쪽지메뉴">
-        <item>test</item>
+        <item></item>
         <item>답장보내기</item>
         <item>삭제하기</item>
     </string-array>

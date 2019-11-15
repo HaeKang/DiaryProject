@@ -30,6 +30,7 @@ public class WriteActivity extends AppCompatActivity {
     private String title;
     private String content;
     private String private_check = "false";
+    private String post_id;
 
     private EditText etitle;
     private EditText econtent;
@@ -59,6 +60,7 @@ public class WriteActivity extends AppCompatActivity {
 
         pre_title = GetIntent.getExtras().getString("title");
         pre_content = GetIntent.getExtras().getString("content");
+        post_id = GetIntent.getExtras().getString("post_id");
 
 
         etitle = findViewById(R.id.title);
@@ -67,14 +69,6 @@ public class WriteActivity extends AppCompatActivity {
         privateCheck = findViewById(R.id.private_check);
 
         weather_radio = findViewById(R.id.weather_group);
-
-
-        privateCheck.setOnClickListener(new CheckBox.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                private_check = "true";
-            }
-        });
 
 
         if(pre_title != null){
@@ -117,8 +111,13 @@ public class WriteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                if(privateCheck.isChecked()){
+                    private_check = "true";
+                }
+
                 title = etitle.getText().toString();
                 content = econtent.getText().toString();
+
 
                 if (weather == null) {
                     Toast.makeText(getApplicationContext(), "날씨를 선택해주세요", Toast.LENGTH_LONG).show();
@@ -138,7 +137,7 @@ public class WriteActivity extends AppCompatActivity {
 
                         // update문
                         WriteUpdate task = new WriteUpdate();
-                        task.execute(getString(R.string.sever) + "/UpdatePost.php", title, content, weather, private_check);
+                        task.execute(getString(R.string.sever) + "/UpdatePost.php", title, content, weather, private_check, post_id);
 
                         Intent intent = new Intent(WriteActivity.this, MainActivity.class);
                         intent.putExtra("user_id", id);
@@ -288,10 +287,11 @@ public class WriteActivity extends AppCompatActivity {
             String content = (String)params[2];
             String weather = (String)params[3];
             String private_check = params[4];
+            String post_id = params[5];
 
 
 
-            String postParameters = "title=" + title + "&content=" + content + "&weather=" + weather + "&private=" + private_check;
+            String postParameters = "title=" + title + "&content=" + content + "&weather=" + weather + "&private=" + private_check + "&post_id=" + post_id;
 
 
             try {

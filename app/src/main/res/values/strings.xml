@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DiaryProject</string>
+    <string name="app_name">어리부</string>
     <string name="title_activity_sign_in">SignInActivity</string>
     <string name="sever">http://cutesami.cafe24.com</string>
 

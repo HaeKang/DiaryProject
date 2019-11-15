@@ -107,13 +107,13 @@ public class PageThreeFragment extends Fragment {
             @Override
             public void onClick(View view, int pos) {
                 String index = mArrayList.get(pos).get(TAG_IDX);
-                String send_nick = mArrayList.get(pos).get(TAG_SENDNID);
+                String send_id = mArrayList.get(pos).get(TAG_SENDNID);
 
                 Intent intent = new Intent(getActivity(), NoteActivity.class);
                 intent.putExtra("INDEX", index);    // 쪽지 index
                 intent.putExtra("USERNICK",nickname);       // 현재 사용자 NICKNAME
                 intent.putExtra("USERID", id);
-                intent.putExtra("SENDNICK", send_nick);     // 쪽지를 보낸 사용자 nickname
+                intent.putExtra("SENDID", send_id);     // 쪽지를 보낸 사용자 nickname
                 startActivity(intent);
             }
         }));

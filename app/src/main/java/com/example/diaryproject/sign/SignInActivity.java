@@ -116,8 +116,8 @@ public class SignInActivity extends AppCompatActivity {
             super.onPostExecute(result);
             progressDialog.dismiss();
 
-
-            if(result.equals("아이디와 패스워드를 다시 확인하세요") || result == null){
+            Log.d("test",result);
+            if(result.equals("아이디와 패스워드를 다시 확인하세요") || result.equals("비밀번호를 다시 확인하세요") || result.equals("존재하지 않는 회원입니다") || result.equals("아이디를 다시 확인하세요")||result == null){
                 Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
             }
             else {

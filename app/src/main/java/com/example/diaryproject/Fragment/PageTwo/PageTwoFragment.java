@@ -27,6 +27,7 @@ import com.example.diaryproject.Fragment.Data;
 import com.example.diaryproject.Fragment.PageOne.PageOneFragment;
 import com.example.diaryproject.Diary.MainActivity;
 import com.example.diaryproject.R;
+import com.example.diaryproject.account.RecyclerAdapter;
 import com.example.diaryproject.sign.SignInActivity;
 
 import org.json.JSONArray;
@@ -66,6 +67,8 @@ public class PageTwoFragment extends Fragment {
     Button write;
     Button logout;
 
+    RecyclerView mRecyclerView;
+
 
     public PageTwoFragment() {
 
@@ -99,7 +102,29 @@ public class PageTwoFragment extends Fragment {
 
         nick_tv.setText(user_nick + "님이 작성한 이야기 목록입니다.");
 
+        // recyclerview
+        mRecyclerView = v.findViewById(R.id.Recycler_my);
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+
+        mAdapter = new RecyclerAdapterTwo();
+        mRecyclerView.setAdapter(mAdapter);
+
+        // recyclerview 클릭 이벤트
+        mRecyclerView.addOnItemTouchListener(new PageOneFragment.RecyclerTouchListener(getActivity(), mRecyclerView, new PageOneFragment.ClickListener(){
+            @Override
+            public void onClick(View view, int pos) {
+                String postid = mArrayList.get(pos).get(TAG_POSTID);
+                Intent intent = new Intent(getActivity(), PostActivity.class);
+                intent.putExtra("POSTID",postid);
+                intent.putExtra("USERID",user_id);
+                intent.putExtra("NICKNAME",user_nick);
+                startActivity(intent);
+            }
+        }));
 
         //글쓰기 버튼 클릭
         write.setOnClickListener(new Button.OnClickListener(){
@@ -213,6 +238,10 @@ public class PageTwoFragment extends Fragment {
             super.onPostExecute(result);
             progressDialog.dismiss();
 
+            // recycler 중복 방지
+            mRecyclerView.setAdapter(null);
+            mAdapter = new RecyclerAdapterTwo();
+            mRecyclerView.setAdapter(mAdapter);
 
             if(result.equals("글이 없오") || result == null){
 
@@ -331,87 +360,17 @@ public class PageTwoFragment extends Fragment {
         getMyPost task = new getMyPost();
         task.execute(id,"");
 
-        RecyclerView mRecyclerView = v.findViewById(R.id.Recycler_my);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-
-        mAdapter = new RecyclerAdapterTwo();
-        mRecyclerView.setAdapter(mAdapter);
-
-        mRecyclerView.addOnItemTouchListener(new PageOneFragment.RecyclerTouchListener(getActivity(), mRecyclerView, new PageOneFragment.ClickListener(){
-            @Override
-            public void onClick(View view, int pos) {
-                String postid = mArrayList.get(pos).get(TAG_POSTID);
-                Intent intent = new Intent(getActivity(), PostActivity.class);
-                intent.putExtra("POSTID",postid);
-                intent.putExtra("USERID",id);
-                intent.putExtra("NICKNAME",nickname);
-                startActivity(intent);
-            }
-        }));
     }
 
     private void ShowOpen(final String id, final String nickname, View v){
         Log.d("test","ShowOpen실행");
         getMyPost task2 = new getMyPost();
         task2.execute(id,"0");
-
-        RecyclerView mRecyclerView = v.findViewById(R.id.Recycler_my);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-
-        mAdapter = new RecyclerAdapterTwo();
-        mRecyclerView.setAdapter(mAdapter);
-
-        mRecyclerView.addOnItemTouchListener(new PageOneFragment.RecyclerTouchListener(getActivity(), mRecyclerView, new PageOneFragment.ClickListener(){
-            @Override
-            public void onClick(View view, int pos) {
-                String postid = mArrayList.get(pos).get(TAG_POSTID);
-                Intent intent = new Intent(getActivity(), PostActivity.class);
-                intent.putExtra("POSTID",postid);
-                intent.putExtra("USERID",id);
-                intent.putExtra("NICKNAME",nickname);
-                startActivity(intent);
-            }
-        }));
     }
 
     private void ShowPrivate(final String id, final String nickname, View v){
         getMyPost task3 = new getMyPost();
         task3.execute(id,"1");
-
-        RecyclerView mRecyclerView = v.findViewById(R.id.Recycler_my);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-
-        mAdapter = new RecyclerAdapterTwo();
-        mRecyclerView.setAdapter(mAdapter);
-
-        mRecyclerView.addOnItemTouchListener(new PageOneFragment.RecyclerTouchListener(getActivity(), mRecyclerView, new PageOneFragment.ClickListener(){
-            @Override
-            public void onClick(View view, int pos) {
-                String postid = mArrayList.get(pos).get(TAG_POSTID);
-                Intent intent = new Intent(getActivity(), PostActivity.class);
-                intent.putExtra("POSTID",postid);
-                intent.putExtra("USERID",id);
-                intent.putExtra("NICKNAME",nickname);
-                startActivity(intent);
-            }
-        }));
     }
 
-    public void clear(){
-        int size = mArrayList.size();
-        mArrayList.clear();
-        mAdapter.notifyItemRangeRemoved(0,size);
-    }
 }

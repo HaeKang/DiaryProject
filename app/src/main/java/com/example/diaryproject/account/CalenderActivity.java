@@ -41,6 +41,7 @@ public class CalenderActivity extends AppCompatActivity {
                 Intent intent = new Intent(CalenderActivity.this, AccountMainActivity.class);
                 intent.putExtra("date", date);
                 intent.putExtra("user_id",user_id);
+                intent.putExtra("user_nickname",user_nick);
                 startActivity(intent);
                 finish();
             }

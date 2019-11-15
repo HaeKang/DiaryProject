@@ -87,6 +87,7 @@ public class AccountMainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         user_id = intent.getExtras().getString("user_id");
         user_nick = intent.getExtras().getString("user_nickname");
+        String date = intent.getStringExtra("date");
 
         //레이아웃 변수설정
         thedate = (TextView) findViewById(R.id.date);
@@ -98,10 +99,6 @@ public class AccountMainActivity extends AppCompatActivity {
 
 
         //날짜 표시 인텐트 설정
-        Intent comingIntent = getIntent();
-        Log.d(TAG, "getintent OK");
-        String date = comingIntent.getStringExtra("date");
-        user_id = comingIntent.getStringExtra("user_id");
         if(!TextUtils.isEmpty(date)){
             View_DATE = date;
             thedate.setText(date);
@@ -140,6 +137,8 @@ public class AccountMainActivity extends AppCompatActivity {
 
                             DeleteAccount deleteAccount = new DeleteAccount();
                             deleteAccount.execute(Account_idx);
+                            SumAccount sumAccount = new SumAccount();
+                            sumAccount.execute(user_id, View_DATE);
 
                         }
                         dialog.dismiss();
@@ -670,8 +669,8 @@ public class AccountMainActivity extends AppCompatActivity {
             Intent intent = new Intent(AccountMainActivity.this , SelectMainActivity.class);
             intent.putExtra("user_id", user_id);
             intent.putExtra("user_nickname", user_nick);
-            startActivity(intent);
             finish();
+            startActivity(intent);
         }
     }
 

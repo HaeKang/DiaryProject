@@ -234,19 +234,20 @@ public class ChartActivity extends AppCompatActivity {
 
                 ArrayList<PieEntry> yValues = new ArrayList<>();
 
-                if(sum_food != 0){
+
+                if(sum_food > 0){
                     yValues.add(new PieEntry(sum_food,"음식"));
                 }
-                if(sum_book != 0){
+                if(sum_book > 0){
                     yValues.add(new PieEntry(sum_book,"도서"));
                 }
-                if(sum_cloth != 0){
+                if(sum_cloth > 0){
                     yValues.add(new PieEntry(sum_cloth,"의류"));
                 }
-                if(sum_traffic != 0){
+                if(sum_traffic > 0){
                     yValues.add(new PieEntry(sum_traffic,"교통"));
                 }
-                if( sum_else != 0){
+                if(sum_else > 0){
                     yValues.add(new PieEntry(sum_else,"기타"));
                 }
 

@@ -57,9 +57,10 @@ public class NoteActivity extends AppCompatActivity {
         final String index = GetIntent.getStringExtra("INDEX");
         user_nick = GetIntent.getStringExtra("USERNICK");
         user_id = GetIntent.getStringExtra("USERID");
-        final String send_nick = GetIntent.getStringExtra("SENDNICK");
+        final String send_id = GetIntent.getStringExtra("SENDID");
 
-        if(send_nick.equals(null)){
+
+        if(send_id.equals(null)){
             Toast.makeText(getApplicationContext(), "삭제된 쪽지입니다.", Toast.LENGTH_LONG).show();
             GoMainActivity(user_id, user_nick);
         }
@@ -75,7 +76,7 @@ public class NoteActivity extends AppCompatActivity {
         sendImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GoSendActivity(send_nick, user_nick);
+                GoSendActivity(send_id, user_id);
             }
         });
 
@@ -89,7 +90,7 @@ public class NoteActivity extends AppCompatActivity {
 
                 }
                 else if(position == 1){
-                    GoSendActivity(send_nick, user_id);
+                    GoSendActivity(send_id, user_id);
                 }
                 else if(position == 2){
                     DeleteNote Deltask = new DeleteNote();
@@ -114,9 +115,9 @@ public class NoteActivity extends AppCompatActivity {
         finish();
     }
 
-    public void GoSendActivity(String send_nick, String user_id){
+    public void GoSendActivity(String send_id, String user_id){
         Intent sendIntent = new Intent(getApplicationContext(), NoteSendActivity.class);
-        sendIntent.putExtra("SENDNICK", send_nick);
+        sendIntent.putExtra("SENDID", send_id);
         sendIntent.putExtra("USERID", user_id);
         startActivity(sendIntent);
     }
