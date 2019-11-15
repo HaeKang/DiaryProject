@@ -38,6 +38,9 @@ public class ChartActivity extends AppCompatActivity {
     private String user_id;
     private String user_nick;
     private String date;
+    private String year;
+    private String month;
+    private String search_date;
 
     String mJsonString;
     private static final String TAG_JSON="webnautes";
@@ -64,8 +67,13 @@ public class ChartActivity extends AppCompatActivity {
         user_nick = getIntent.getExtras().getString("user_nickname");
         date = getIntent.getStringExtra("date");
 
+        String[] array = date.split("/");
+        year = array[0];
+        month = array[1];
+        search_date = year + "/" + month + "/%";
+
         ValueSum task = new ValueSum();
-        task.execute(user_id, date);
+        task.execute(user_id, search_date);
 
     }
 
@@ -252,7 +260,7 @@ public class ChartActivity extends AppCompatActivity {
                 }
 
                 Description description = new Description();
-                description.setText(date + " 지출 패턴 분석");
+                description.setText(year +"년 " + month + "월" + " 지출 패턴 분석");
                 description.setTextSize(15);
                 chart.setDescription(description);
                 chart.animateY(1000, Easing.EaseInOutCubic); //애니메이션

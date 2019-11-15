@@ -58,6 +58,7 @@ public class AccountMainActivity extends AppCompatActivity {
     private Button btn_go_chart;
     private Button btn_go_add;
     private TextView sum_view;
+    private TextView sum_month_view;
 
 
     String user_id;
@@ -65,6 +66,9 @@ public class AccountMainActivity extends AppCompatActivity {
     String Account_idx;
 
     public static String View_DATE = getToday_date();
+    private String year;
+    private String month;
+    private String month_date;
 
 
     private static final String TAG_JSON="webnautes";
@@ -95,6 +99,7 @@ public class AccountMainActivity extends AppCompatActivity {
         btn_go_chart = findViewById(R.id.pie_btn);
         mRecyclerView = findViewById(R.id.account_list);
         sum_view = (TextView) findViewById(R.id.total_sum);
+        sum_month_view = findViewById(R.id.month_sum);
         btn_go_add = findViewById(R.id.goAdd);
 
 
@@ -102,6 +107,7 @@ public class AccountMainActivity extends AppCompatActivity {
         if(!TextUtils.isEmpty(date)){
             View_DATE = date;
             thedate.setText(date);
+
             Log.d(TAG, "string is not empty");
         } else{
             //date = getToday_date();
@@ -158,6 +164,15 @@ public class AccountMainActivity extends AppCompatActivity {
 
         SumAccount sumtask = new SumAccount();
         sumtask.execute(user_id, View_DATE);
+
+        String[] array = View_DATE.split("/");
+        year = array[0];
+        month = array[1];
+        month_date = year + "/" + month + "/%";
+
+        SumMonthAccount sumMonthAccount = new SumMonthAccount();
+        sumMonthAccount.execute(user_id, month_date);
+
 
 
         // 달력 이동
@@ -427,6 +442,133 @@ public class AccountMainActivity extends AppCompatActivity {
 
         }
     }
+
+    // month sum 구하기
+    // 총합 가격
+    private class SumMonthAccount extends AsyncTask<String, Void, String> {
+
+        ProgressDialog progressDialog;
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = ProgressDialog.show(AccountMainActivity.this,
+                    "Please Wait", null, true, true);
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            progressDialog.dismiss();
+
+
+            if(result.equals("error")){
+                //Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
+            }
+
+
+            if (result == null || result.equals("")){
+                Toast.makeText(getApplicationContext(),errorString,Toast.LENGTH_LONG).show();
+            }
+            else {
+                mJsonString = result;
+                showResult();
+            }
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String id = params[0];
+            String date = params[1];
+
+            String serverURL = getString(R.string.sever) + "/AccountSumMonth.php";
+            String postParameters = "id=" + id + "&date=" + date;
+
+
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d(TAG, "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+
+
+                bufferedReader.close();
+
+
+                return sb.toString().trim();
+
+
+            } catch (Exception e) {
+
+                Log.d(TAG, "InsertData: Error ", e);
+                errorString = e.toString();
+
+                return null;
+            }
+
+        }
+
+        private void showResult(){
+            try {
+                JSONObject jsonObject = new JSONObject(mJsonString);
+                JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+                JSONObject item = jsonArray.getJSONObject(0);
+
+                String sum_month = item.getString(TAG_SUM);
+                sum_month_view.setText(sum_month);
+
+
+            } catch (JSONException e) {
+
+                Log.d(TAG, "showResult : ", e);
+            }
+
+        }
+    }
+
+
 
 
     // Account list
